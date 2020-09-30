@@ -1,4 +1,11 @@
 
+import glob
+from Recipe import Recipe
+from Ingredient import Ingredient
+import random
+import sys, getopt
+
+
 class Population:
 
     def __init__(self, generations, mutate_prob):
