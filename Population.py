@@ -25,6 +25,16 @@ class Population:
         sample_list = []
         breeding_pool = []
 
+        ranked_recipes = sorted(recipes)
+        rank = 1
+        for recipe in ranked_recipes:
+            sample_list = sample_list + rank*[recipe]
+            rank += 1
+
+        for i in range(0, len(self.population)):
+            random.shuffle(sampling_list) #Randomly shuffles list
+            breeding_pool.append(sampling_list[0])
+
         self.population = breeding_pool
 
 
