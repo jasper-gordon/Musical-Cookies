@@ -1,7 +1,10 @@
 
+from Ingredient import Ingredient
+import random
+
 class Recipe:
 
- """"An initiliazing method for any new object of the Recipe class that takes a string name and a list of Ingredient
+    """"An initiliazing method for any new object of the Recipe class that takes a string name and a list of Ingredient
             objects as arguments."""
     def __init__(self, name, ingredient_list):
         self.name = name

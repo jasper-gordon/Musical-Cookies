@@ -13,29 +13,33 @@ CONSTANT_MIN_PIVOT = 3  # crossover pivot will always be > 3,
 
 class Population:
 
-    def __init__(self, generations, mutate_prob):
+    def __init__(self, generations, filepath_folder, mutate_prob):
         self.population = []
         self.knowledge_base = []
         self.generations = generations
         self.mutate_prob = mutate_prob
 
-        current_file = open(filename, "r")
-        current_recipe = []
-        for line in current_file:
-            line = line.strip()
-            words = line.split(" ", 2)
-            # Creating new Ingredient object with name, quantity, and unit
-            new_ingredient = Ingredient(words[2], float(words[0], words[1]))
-            recipe.append(new_ingredient)
-        new_recipe = Recipe(filename[6:-4], current_recipe)
-        self.population.append(new_recipe)
+        for filename in glob.glob(filepath_folder):
+            current_file = open(filename, "r")
+            current_recipe = []
+            for line in current_file:
+                line = line.strip()
+                words = line.split(" ", 2)
+                # Dealing with lines with no units (exp "2 eggs")
+                if len(words) == 2:
+                    words.append (" ")
+                # Creating new Ingredient object with name, quantity, and unit
+                new_ingredient = Ingredient(words[2], float(words[0]), words[1])
+                current_recipe.append(new_ingredient)
+            new_recipe = Recipe(filename[6:-4], current_recipe)
+            self.population.append(new_recipe)
 
     def generate(self):
         best_cookie = self.population[0]
         for i in range(0, self.generations):
             self.select()
-            self.crossover():
-            self.mutate():
+            self.crossover()
+            self.mutate()
 
             for cookie in self.population:
                 if best_cookie.evaluate() <= cookie.evaluate():
@@ -67,7 +71,7 @@ class Population:
         next_generation = []
 
         def one_point_crossover(parent1, parent2):
-            pivot1 = random.randint(CONSTANT_MIN_PIVOT), len(parent1.ingredient_list) - 1)
+            pivot1 = random.randint((CONSTANT_MIN_PIVOT), len(parent1.ingredient_list) - 1)
             pivot2=random.randint(CONSTANT_MIN_PIVOT, len(
                 parent2.ingredient_list) - 1)
 
