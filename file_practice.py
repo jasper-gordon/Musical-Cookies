@@ -1,5 +1,5 @@
 
-print("hello")
+
 
 '''
 for filename in glob.glob(filepath_folder):
@@ -19,4 +19,20 @@ for filename in glob.glob(filepath_folder):
             self.population.append(new_recipe)
             '''
 
-print ("hello")
+def fileparse(filename):
+    current_file = open(filename, "r")
+    recipe = []
+    for line in current_file:
+        line = line.strip()
+        words = line.split(" ", 2)
+        #Creating new Ingredient object with name and quantity
+        new_ingredient = Ingredient(words[2], float(words[0], words[1]))
+        recipe.append(new_ingredient)
+    new_recipe = Recipe(filename[6:-4], recipe)
+    self.population.append(new_recipe)
+                
+
+
+print(fileparse("sugar_cookies.txt"))
+
+
