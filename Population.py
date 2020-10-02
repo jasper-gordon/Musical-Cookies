@@ -6,7 +6,7 @@ import random
 import sys
 import getopt
 
-CONSTANT_MIN_PIVOT = 3  # crossover pivot will always be > 3,
+CONSTANT_MIN_PIVOT = 2  # crossover pivot will always be > 3,
 # first 3 indexes in a cookie recipe's ingredient list will be a flour, a sugar,
 # and a fat, which is needed to be present in every cookie recipe
 
@@ -31,6 +31,26 @@ class Population:
                 # Creating new Ingredient object with name, quantity, and unit
                 new_ingredient = Ingredient(words[2], float(words[0]), words[1])
                 current_recipe.append(new_ingredient)
+            flour = ''
+            sugar = ''
+            flour_index = 0
+            sugar_index = 0
+            for ingredient in current_recipe:
+                if 'flour' in ingredient.name:
+                    flour = Ingredient(ingredient.name, ingredient.amount, ingredient.unit)
+                    flour_index += 1
+                    break
+            current_recipe.pop(flour_index)
+
+            for ingredient in current_recipe:
+                if 'sugar' in ingredient.name:
+                    sugar = Ingredient(ingredient.name, ingredient.amount, ingredient.unit)
+                    sugar_index += 1
+                    break
+            current_recipe.pop(sugar_index)
+            current_recipe.insert(0,sugar)
+            current_recipe.insert(0,flour)
+
             new_recipe = Recipe(filename[15:-4], current_recipe)
             self.population.append(new_recipe)
 
@@ -89,7 +109,7 @@ class Population:
 
         def one_point_crossover(parent1, parent2):
             pivot1 = random.randint((CONSTANT_MIN_PIVOT), len(parent1.ingredient_list) - 1)
-            pivot2=random.randint(CONSTANT_MIN_PIVOT, len(
+            pivot2 = random.randint(CONSTANT_MIN_PIVOT, len(
                 parent2.ingredient_list) - 1)
 
             parent1_sublist1 = parent1.ingredient_list[:pivot1]
@@ -105,13 +125,13 @@ class Population:
                 ingredient_dict = {}
                 unique_ingredients = []
                 for ingredient in recipe:
-                    if ingredient.name in ingredient_dict:
-                        ingredient_dict[ingredient.name] += ingredient.amount
+                    if ingredient.name.strip() in ingredient_dict:
+                        ingredient_dict[ingredient.name.strip()] += ingredient.amount
                     else:
-                        ingredient_dict[ingredient.name] = ingredient.amount
+                        ingredient_dict[ingredient.name.strip()] = ingredient.amount
                         unique_ingredients.append(ingredient)
                 for ingredient in unique_ingredients:
-                    ingredient.amount = ingredient_dict[ingredient.name]
+                    ingredient.amount = ingredient_dict[ingredient.name.strip()]
                 return unique_ingredients
 
             cleaned_recipe1 = clean(new_recipe1_list)
@@ -121,12 +141,16 @@ class Population:
 
         # Go through shuffled breeding_pool and picks pairs
         for i in range(0, len(self.population), 2):
-            child1_list, child2_list = one_point_crossover(
-                parents[i], parents[i+1])
+            child1_list, child2_list = one_point_crossover(parents[i], parents[i+1])
+
+            child1_name = ''
+            child2_name = ''
+
             parent1_name = parents[i].name.split('_')
             parent2_name = parents[i+1].name.split('_')
-            pivot1 = random.randint(1, len(parent1_name) - 1)
-            pivot2 = random.randint(1, len(parent2_name) - 1)
+
+            pivot1 = random.randint(1, len(parent1_name))
+            pivot2 = random.randint(1, len(parent2_name))
 
             parent1_sublist1 = parent1_name[:pivot1]
             parent1_sublist2 = parent1_name[pivot1:]
@@ -141,7 +165,7 @@ class Population:
             next_generation.append(child1)
             next_generation.append(child2)
 
-        self.population=next_generation
+        self.population = next_generation
         # Every recipe needs flour, sugar, and an egg
         # basic_ingredients = {'flour': , 'sugar': , 'butter': }
 
