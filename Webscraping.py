@@ -29,7 +29,7 @@ def scrapeMyAss(url):
         ingredient_list.append(ingredient.text)
     print(ingredient_list)"""
 
-    for i in range(20):
+    for i in range(10):
 
         req = Request(link_list[i], headers={"User-Agent": "Chrome"})
         source = urlopen(req).read().decode('utf-8')
