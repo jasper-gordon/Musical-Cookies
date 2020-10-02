@@ -31,22 +31,22 @@ class Population:
                 # Creating new Ingredient object with name, quantity, and unit
                 new_ingredient = Ingredient(words[2], float(words[0]), words[1])
                 current_recipe.append(new_ingredient)
-            flour = ''
-            sugar = ''
+            flour = Ingredient(None, None, None)
+            sugar = Ingredient(None, None, None)
             flour_index = 0
             sugar_index = 0
             for ingredient in current_recipe:
                 if 'flour' in ingredient.name:
-                    flour = Ingredient(ingredient.name, ingredient.amount, ingredient.unit)
-                    flour_index += 1
+                    flour = ingredient
                     break
+                flour_index += 1
             current_recipe.pop(flour_index)
 
             for ingredient in current_recipe:
                 if 'sugar' in ingredient.name:
-                    sugar = Ingredient(ingredient.name, ingredient.amount, ingredient.unit)
-                    sugar_index += 1
+                    sugar = ingredient
                     break
+                sugar_index += 1
             current_recipe.pop(sugar_index)
             current_recipe.insert(0,sugar)
             current_recipe.insert(0,flour)
@@ -125,13 +125,13 @@ class Population:
                 ingredient_dict = {}
                 unique_ingredients = []
                 for ingredient in recipe:
-                    if ingredient.name.strip() in ingredient_dict:
-                        ingredient_dict[ingredient.name.strip()] += ingredient.amount
+                    if ingredient.name in ingredient_dict:
+                        ingredient_dict[ingredient.name] += ingredient.amount
                     else:
-                        ingredient_dict[ingredient.name.strip()] = ingredient.amount
+                        ingredient_dict[ingredient.name] = ingredient.amount
                         unique_ingredients.append(ingredient)
                 for ingredient in unique_ingredients:
-                    ingredient.amount = ingredient_dict[ingredient.name.strip()]
+                    ingredient.amount = ingredient_dict[ingredient.name]
                 return unique_ingredients
 
             cleaned_recipe1 = clean(new_recipe1_list)
