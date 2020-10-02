@@ -31,8 +31,24 @@ class Population:
                 # Creating new Ingredient object with name, quantity, and unit
                 new_ingredient = Ingredient(words[2], float(words[0]), words[1])
                 current_recipe.append(new_ingredient)
-            new_recipe = Recipe(filename[6:-4], current_recipe)
+            new_recipe = Recipe(filename[15:-4], current_recipe)
             self.population.append(new_recipe)
+
+    """
+    Returns string representation of Population.
+    """
+    def __str__(self):
+        #Returns a string representation of this Population
+        output = ""
+        for i in self.population:
+            output += str(i)
+        return output
+
+    """
+    Lets us make an object of the same value.
+    """
+    def __repr__(self):
+        return "Population('{0}')".format(self.population)
 
     def generate(self):
         best_cookie = self.population[0]
@@ -45,7 +61,8 @@ class Population:
                 if best_cookie.evaluate() <= cookie.evaluate():
                     best_cookie = cookie
 
-        return self.population
+        #return self.population
+        return best_cookie
 
     def select(self):
 
@@ -60,8 +77,8 @@ class Population:
             rank += 1
 
         for i in range(0, len(self.population)):
-            random.shuffle(sampling_list)  # Randomly shuffles list
-            breeding_pool.append(sampling_list[0])
+            random.shuffle(sample_list)  # Randomly shuffles list
+            breeding_pool.append(sample_list[0])
 
         self.population = breeding_pool
 
@@ -75,52 +92,52 @@ class Population:
             pivot2=random.randint(CONSTANT_MIN_PIVOT, len(
                 parent2.ingredient_list) - 1)
 
-            parent1_sublist1=parent1.ingredient_list[:pivot1]
-            parent1_sublist2=parent1.ingredient_list[pivot1:]
-            parent2_sublist1=parent2.ingredient_list[:pivot2]
-            parent2_sublist2=parent2.ingredient_list[pivot2:]
+            parent1_sublist1 = parent1.ingredient_list[:pivot1]
+            parent1_sublist2 = parent1.ingredient_list[pivot1:]
+            parent2_sublist1 = parent2.ingredient_list[:pivot2]
+            parent2_sublist2 = parent2.ingredient_list[pivot2:]
 
-            new_recipe1_list=parent1_sublist1 + parent2_sublist2
-            new_recipe2_list=parent2_sublist1 + parent1_sublist2
+            new_recipe1_list = parent1_sublist1 + parent2_sublist2
+            new_recipe2_list = parent2_sublist1 + parent1_sublist2
 
             # Helper method, gets rid of duplicate ingredients in ingredient list
             def clean(recipe):
-                ingredient_dict={}
-                unique_ingredients=[]
+                ingredient_dict = {}
+                unique_ingredients = []
                 for ingredient in recipe:
                     if ingredient.name in ingredient_dict:
                         ingredient_dict[ingredient.name] += ingredient.amount
                     else:
-                        ingredient_dict[ingredient.name]=ingredient.amount
+                        ingredient_dict[ingredient.name] = ingredient.amount
                         unique_ingredients.append(ingredient)
                 for ingredient in unique_ingredients:
-                    ingredient.amount=ingredient_dict[ingredient.name]
+                    ingredient.amount = ingredient_dict[ingredient.name]
                 return unique_ingredients
 
-            cleaned_recipe1=clean(new_recipe1_list)
-            cleaned_recipe2=clean(new_recipe2_list)
+            cleaned_recipe1 = clean(new_recipe1_list)
+            cleaned_recipe2 = clean(new_recipe2_list)
 
             return cleaned_recipe1, cleaned_recipe2
 
         # Go through shuffled breeding_pool and picks pairs
         for i in range(0, len(self.population), 2):
-            child1_list, child2_list=one_point_crossover(
+            child1_list, child2_list = one_point_crossover(
                 parents[i], parents[i+1])
-            parent1_name=parents[i].name.split()
-            parent2_name=parents[i+1].name.split()
-            pivot1=random.randint(1, len(parent1.ingredient_list) - 1)
-            pivot2=random.randint(1, len(parent2.ingredient_list) - 1)
+            parent1_name = parents[i].name.split('_')
+            parent2_name = parents[i+1].name.split('_')
+            pivot1 = random.randint(1, len(parent1_name) - 1)
+            pivot2 = random.randint(1, len(parent2_name) - 1)
 
-            parent1_sublist1=parent1_name[:pivot1]
-            parent1_sublist2=parent1_name[pivot1:]
-            parent2_sublist1=parent1_name[:pivot2]
-            parent2_sublist2=parent1_name[pivot2:]
+            parent1_sublist1 = parent1_name[:pivot1]
+            parent1_sublist2 = parent1_name[pivot1:]
+            parent2_sublist1 = parent1_name[:pivot2]
+            parent2_sublist2 = parent1_name[pivot2:]
 
-            child1_name=" ".join(parent1_sublist1 + parent2_sublist2)
-            child2_name=" ".join(parent2_sublist1 + parent1_sublist2)
+            child1_name = " ".join(parent1_sublist1 + parent2_sublist2)
+            child2_name = " ".join(parent2_sublist1 + parent1_sublist2)
 
-            child1=Recipe(child1_name, child1_list)
-            child2=Recipe(child2_name, child2_list)
+            child1 = Recipe(child1_name, child1_list)
+            child2 = Recipe(child2_name, child2_list)
             next_generation.append(child1)
             next_generation.append(child2)
 

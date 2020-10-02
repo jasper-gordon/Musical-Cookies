@@ -23,7 +23,10 @@ class Recipe:
     Returns a boolean
     """
     def __lt__(self, other):
-        return self.evaluate() < other.evalueate()
+        return self.evaluate() < other.evaluate()
 
     def evaluate(self):
         return len(self.ingredient_list)
+
+    def mutate(self, mutate_prob, knowledge_base):
+        pass
