@@ -5,7 +5,8 @@ from Ingredient import Ingredient
 import random
 import sys
 import getopt
-
+from Webscraping import *
+from fractions import Fraction
 CONSTANT_MIN_PIVOT = 2  # crossover pivot will always be > 3,
 # first 3 indexes in a cookie recipe's ingredient list will be a flour, a sugar,
 # and a fat, which is needed to be present in every cookie recipe
@@ -18,19 +19,29 @@ class Population:
         self.knowledge_base = []
         self.generations = generations
         self.mutate_prob = mutate_prob
+        self.recipe_counter = 1
 
-        for filename in glob.glob(filepath_folder):
-            current_file = open(filename, "r")
-            current_recipe = []
-            for line in current_file:
-                line = line.strip()
-                words = line.split(" ", 2)
+        #for filename in glob.glob(filepath_folder):
+        #current_file = open(filename, "r")
+        # calling web scrpaing method from the Webscraping file, giving it URL
+        print("Hello")
+        current_recipe = []
+        current_file = web_scraper(filepath_folder)
+        for line in current_file:
+            for element in line:
+                #line = line.strip()
+                words = element.split(" ", 2)
+                
+                #PROBLEM AREA - Trying to check if - is in string and if so remove that portion of the stirng (i.e. 2-1/2 becomes 2)
+                if "-" in words[0]:
+                    words[0] = words[0].split("-")[0]
                 # Dealing with lines with no units (exp "2 eggs")
                 if len(words) == 2:
                     words.append (" ")
-                # Creating new Ingredient object with name, quantity, and unit
-                new_ingredient = Ingredient(words[2], float(words[0]), words[1])
+                 # Creating new Ingredient object with name, quantity, and unit
+                new_ingredient = Ingredient(words[2], float(Fraction(words[0])), words[1])
                 current_recipe.append(new_ingredient)
+            # Setting flour and sugar to the front of the list
             flour = Ingredient(None, None, None)
             sugar = Ingredient(None, None, None)
             flour_index = 0
@@ -51,7 +62,9 @@ class Population:
             current_recipe.insert(0,sugar)
             current_recipe.insert(0,flour)
 
-            new_recipe = Recipe(filename[15:-4], current_recipe)
+            #new_recipe = Recipe(filename[15:-4], current_recipe)
+            new_recipe = Recipe("Cookie Recipe " + str(self.recipe_counter), current_recipe)
+            self.recipe_counter += 1
             self.population.append(new_recipe)
 
     """

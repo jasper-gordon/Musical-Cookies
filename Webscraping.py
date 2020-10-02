@@ -1,10 +1,12 @@
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 import sys
+from Ingredient import Ingredient
+from Recipe import Recipe
 
 
 
-def scrapeMyAss(url):
+def web_scraper(url):
 
     # sets a known browser user agent
     req = Request(url, headers={"User-Agent": "Chrome"})
@@ -22,6 +24,8 @@ def scrapeMyAss(url):
     req = Request(link_list[0], headers={"User-Agent": "Chrome"})
     source = urlopen(req).read().decode('utf-8')
     soup = BeautifulSoup(source, 'html.parser')
+
+    
     
     """recipe = soup.find('ul', {"class": "recipe-ingredients__list recipe-ingredients__collection splitColumns"})
     ingredient_list = []
@@ -46,12 +50,14 @@ def scrapeMyAss(url):
 
         recipe_list.append(ingredient_list)
     
-    print(type(recipe_list[1][1]))
-    print(recipe_list)
+    #print(type(recipe_list[1][1]))
+    #print(recipe_list)
+    print("Webscraper was called")
+    return recipe_list
 
 def main():
 
-    scrapeMyAss(sys.argv[1])
+    web_scraper(sys.argv[1])
 
 if __name__ == "__main__":
     main()
