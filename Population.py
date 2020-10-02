@@ -24,23 +24,33 @@ class Population:
         #for filename in glob.glob(filepath_folder):
         #current_file = open(filename, "r")
         # calling web scrpaing method from the Webscraping file, giving it URL
-        print("Hello")
+        print("Me no resist cookies.")
         current_recipe = []
         current_file = web_scraper(filepath_folder)
         for line in current_file:
+            
             for element in line:
                 #line = line.strip()
                 words = element.split(" ", 2)
                 
                 #PROBLEM AREA - Trying to check if - is in string and if so remove that portion of the stirng (i.e. 2-1/2 becomes 2)
                 if "-" in words[0]:
+                    
                     words[0] = words[0].split("-")[0]
+                    
                 # Dealing with lines with no units (exp "2 eggs")
                 if len(words) == 2:
                     words.append (" ")
                  # Creating new Ingredient object with name, quantity, and unit
-                new_ingredient = Ingredient(words[2], float(Fraction(words[0])), words[1])
-                current_recipe.append(new_ingredient)
+
+                is_num = False
+                
+                if words[0][0].isdigit():
+                    is_num = True
+
+                if is_num:
+                    new_ingredient = Ingredient(words[2], float(Fraction(words[0])), words[1])
+                    current_recipe.append(new_ingredient)
             # Setting flour and sugar to the front of the list
             flour = Ingredient(None, None, None)
             sugar = Ingredient(None, None, None)
