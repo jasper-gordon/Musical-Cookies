@@ -18,8 +18,6 @@ def web_scraper(url):
     for section in soup.findAll('div', {"class": "listicle-page__cta-button"}):
         for link in section.findAll('a'):
             link_list.append(link.get('href'))
-    
-    recipe_list = []
 
     """req = Request(link_list[0], headers={"User-Agent": "Chrome"})
     source = urlopen(req).read().decode('utf-8')
@@ -33,13 +31,15 @@ def web_scraper(url):
         ingredient_list.append(ingredient.text)
     print(ingredient_list)"""
 
+    ingredient_dict = {}
+    
     for i in range(10):
 
         req = Request(link_list[i], headers={"User-Agent": "Chrome"})
         source = urlopen(req).read().decode('utf-8')
         soup = BeautifulSoup(source, 'html.parser')
 
-        ingredient_dict = {}
+        
         ingredient_list = []
         
         recipe_name = str(soup.find('h1', {"class": "recipe-title"}).text)
@@ -52,13 +52,12 @@ def web_scraper(url):
                     ingredient_list.append(str(ingredient))
         
         ingredient_dict[recipe_name] = ingredient_list
-        recipe_list.append(ingredient_dict)
     
     #print(type(recipe_list[1][1]))
     #print(recipe_list)
     print("Webscraper was called")
-    print(recipe_list)
-    return recipe_list
+    print(ingredient_dict)
+    return ingredient_dict
 
 def main():
 
