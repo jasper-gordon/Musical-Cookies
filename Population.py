@@ -25,10 +25,10 @@ class Population:
         #current_file = open(filename, "r")
         # calling web scrpaing method from the Webscraping file, giving it URL
         print("Me no resist cookies.")
-        current_file = web_scraper(filepath_folder)
-        for line in current_file:
+        cookie_dict = web_scraper(filepath_folder)
+        for cookie_name in cookie_dict:
             current_recipe = []
-            for element in line:
+            for element in cookie_dict[cookie_name]:
                 #line = line.strip()
                 words = element.split(" ", 2)
 
@@ -79,7 +79,7 @@ class Population:
             current_recipe.insert(0,flour)
 
             #new_recipe = Recipe(filename[15:-4], current_recipe)
-            new_recipe = Recipe("Cookie Recipe " + str(self.recipe_counter), current_recipe)
+            new_recipe = Recipe(cookie_name, current_recipe)
             self.recipe_counter += 1
             self.population.append(new_recipe)
 
@@ -174,8 +174,8 @@ class Population:
             child1_name = ''
             child2_name = ''
 
-            parent1_name = parents[i].name.split('_')
-            parent2_name = parents[i+1].name.split('_')
+            parent1_name = parents[i].name.split(' ')
+            parent2_name = parents[i+1].name.split(' ')
 
             pivot1 = random.randint(1, len(parent1_name))
             pivot2 = random.randint(1, len(parent2_name))

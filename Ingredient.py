@@ -1,5 +1,5 @@
 
-class Ingredient: 
+class Ingredient:
 
     def __init__(self, name, amount, unit):
         self.name = name
@@ -8,7 +8,7 @@ class Ingredient:
 
     #Returns string representation of this Ingredient
     def __str__(self):
-        output = str(self.amount) + self.unit + self.name
+        output = str(self.amount) + " " + self.unit + " " +self.name
         return output
 
     def __repr__(self):
