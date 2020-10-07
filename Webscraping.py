@@ -21,9 +21,9 @@ def web_scraper(url):
     
     recipe_list = []
 
-    req = Request(link_list[0], headers={"User-Agent": "Chrome"})
+    """req = Request(link_list[0], headers={"User-Agent": "Chrome"})
     source = urlopen(req).read().decode('utf-8')
-    soup = BeautifulSoup(source, 'html.parser')
+    soup = BeautifulSoup(source, 'html.parser')"""
 
     
     
@@ -39,20 +39,25 @@ def web_scraper(url):
         source = urlopen(req).read().decode('utf-8')
         soup = BeautifulSoup(source, 'html.parser')
 
+        ingredient_dict = {}
         ingredient_list = []
+        
+        recipe_name = str(soup.find('h1', {"class": "recipe-title"}).text)
 
         for recipe in soup.find('ul', {"class": "recipe-ingredients__list recipe-ingredients__collection splitColumns"}):
             
             for ingredient in recipe:
-                
-                ingredient_list.append(str(ingredient))
-        
 
-        recipe_list.append(ingredient_list)
+                if ingredient != soup.find('b', {"class": "sIngredient"}):
+                    ingredient_list.append(str(ingredient))
+        
+        ingredient_dict[recipe_name] = ingredient_list
+        recipe_list.append(ingredient_dict)
     
     #print(type(recipe_list[1][1]))
     #print(recipe_list)
     print("Webscraper was called")
+    print(recipe_list)
     return recipe_list
 
 def main():
