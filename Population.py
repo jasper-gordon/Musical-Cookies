@@ -25,26 +25,25 @@ class Population:
         #current_file = open(filename, "r")
         # calling web scrpaing method from the Webscraping file, giving it URL
         print("Me no resist cookies.")
-        current_recipe = []
         current_file = web_scraper(filepath_folder)
         for line in current_file:
-            
+            current_recipe = []
             for element in line:
                 #line = line.strip()
                 words = element.split(" ", 2)
-                
+
                 #PROBLEM AREA - Trying to check if - is in string and if so remove that portion of the stirng (i.e. 2-1/2 becomes 2)
                 if "-" in words[0]:
-                    
+
                     words[0] = words[0].split("-")[0]
-                    
+
                 # Dealing with lines with no units (exp "2 eggs")
                 if len(words) == 2:
                     words.append (" ")
                  # Creating new Ingredient object with name, quantity, and unit
 
                 is_num = False
-                
+
                 if words[0][0].isdigit():
                     is_num = True
 
@@ -61,6 +60,13 @@ class Population:
                     flour = ingredient
                     break
                 flour_index += 1
+            #print(flour_index)
+            #print("Recipe Length: " + str(len(current_recipe)))
+
+            if(len(current_recipe) == 4 or len(current_recipe) == 5):
+                continue
+                #print(current_recipe)
+
             current_recipe.pop(flour_index)
 
             for ingredient in current_recipe:
@@ -104,7 +110,6 @@ class Population:
                 if best_cookie.evaluate() <= cookie.evaluate():
                     best_cookie = cookie
 
-        #return self.population
         return best_cookie
 
     def select(self):
