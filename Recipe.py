@@ -41,22 +41,35 @@ class Recipe:
         return self.evaluation < other.evaluation
 
     def evaluate(self):
-        for ingredient1 in ingredient_list:
-            ing1_parts = ingredient1.name.split(" ")
-            for part in ing1_parts:
-                if part in INGREDIENT_LIST:
-                    return
-
-            if ingredient1.name not in INGREDIENT_LIST:
+        score = 0.0
+        for ingredient1 in self.ingredient_list:
+            n1 = ""
+            if ingredient1.name in INGREDIENT_LIST:
+                n1 = ingredient1.name
+            else:
+                ing1_parts = ingredient1.name.split(" ")
+                for part in ing1_parts:
+                    if part in INGREDIENT_LIST:
+                        n1 = part
+            if not n1:
                 continue
-            for ingredient2 in ingredient_list:
-                if ingredient2 not in INGREDIENT_LIST:
-                    continue
-                elif ingredient1.name == ingredient2.name:
-                    continue
-                elif ingredient.name in INGREDIENT_LIST:
 
-        return len(self.ingredient_list)
+            for ingredient2 in self.ingredient_list:
+                n2 = ""
+                if ingredient1.name == ingredient2.name:
+                    continue
+                elif ingredient2.name in INGREDIENT_LIST:
+                    n2 = ingredient2.name
+                else:
+                    ing2_parts = ingredient2.name.split(" ")
+                    for part in ing2_parts:
+                        if part in INGREDIENT_LIST:
+                            n2 = part
+                if not n2:
+                    continue
+                
+
+        return score
 
     def mutate(self, mutate_prob, knowledge_base):
         #Add ingredient from song list, if ingredeint already there then add a pairing
@@ -68,5 +81,3 @@ class Recipe:
         #Delete ingredient from recipe
         else:
             self.ingredient_list.remove(random.randint(2,len(self.ingredient_list))
-
-
