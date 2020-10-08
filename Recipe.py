@@ -59,6 +59,14 @@ class Recipe:
         return len(self.ingredient_list)
 
     def mutate(self, mutate_prob, knowledge_base):
-        pass
+        #Add ingredient from song list, if ingredeint already there then add a pairing
+        if mutate_prob <= .4:
+            pass
+        #Swap ingredient with ingredient from song list
+        elif mutate_prob <= .8:
+            pass
+        #Delete ingredient from recipe
+        else:
+            self.ingredient_list.remove(random.randint(2,len(self.ingredient_list))
 
 

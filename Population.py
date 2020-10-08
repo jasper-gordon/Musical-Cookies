@@ -232,7 +232,7 @@ def lyric_gatherer(song_limit, artist_name):
         songs = genius.search_artist(artist_name, max_songs = song_limit, sort = "popularity" ).songs
     except:
         print("This artist input is invalid")
-        exit()
+        return lyric_list 
     else:
         print("made it this far")
         for song in songs:
