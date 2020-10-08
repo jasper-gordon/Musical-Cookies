@@ -73,3 +73,8 @@ print("Here are the lyrics by " + artist + " that are also known ingredients: ")
 if test_list is not None:
     print(*ingredient_matcher(test_list), sep = ", ")
 print ("yay made it")
+
+
+#Things we need to address:
+#Is the catching of bad input proper?
+#What do we do if the artist is correct just no ingredient matches? Probably pick randomly from known ingredient list
