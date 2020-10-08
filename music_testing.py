@@ -61,6 +61,6 @@ def lyric_gatherer(song_limit, artist_name):
     return lyric_list
 
     
-test_list = lyric_gatherer(3, "Jimmy Buffett")
+test_list = lyric_gatherer(7, "Jimmy Buffet")
 print("Here are the lyrics by Jimmy Buffet that are also known ingredients: ")
 print(*ingredient_matcher(test_list), sep = ", ")
