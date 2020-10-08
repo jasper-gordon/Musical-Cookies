@@ -13,15 +13,20 @@ INGREDIENT_LIST = sorted(WORD_EMBED_VALS.keys())
 
 class Recipe:
 
-    """"An initiliazing method for any new object of the Recipe class that takes a string name, a list of Ingredient
-            objects, and a string Artist name as arguments."""
-    def __init__(self, name, ingredient_list, artist_name:
+    """
+    An initiliazing method for any new object of the Recipe class that takes a string name, a list of Ingredient
+            objects, and a string Artist name as arguments.
+    """
+
+    def __init__(self, name, ingredient_list, artist_name):
         self.name = name
         self.ingredient_list = ingredient_list
         self.artist_name = artist_name
+        self.evaluation = self.evaluate()
 
-
-    """Returns a string representation of this Recipe."""
+    """
+    #Returns a string representation of this Recipe.
+    """
     def __str__(self):
         output = self.name + "\n"
         for i in self.ingredient_list:
@@ -33,9 +38,24 @@ class Recipe:
     Returns a boolean
     """
     def __lt__(self, other):
-        return self.evaluate() < other.evaluate()
+        return self.evaluation < other.evaluation
 
     def evaluate(self):
+        for ingredient1 in ingredient_list:
+            ing1_parts = ingredient1.name.split(" ")
+            for part in ing1_parts:
+                if part in INGREDIENT_LIST:
+                    return
+
+            if ingredient1.name not in INGREDIENT_LIST:
+                continue
+            for ingredient2 in ingredient_list:
+                if ingredient2 not in INGREDIENT_LIST:
+                    continue
+                elif ingredient1.name == ingredient2.name:
+                    continue
+                elif ingredient.name in INGREDIENT_LIST:
+
         return len(self.ingredient_list)
 
     def mutate(self, mutate_prob, knowledge_base):
@@ -66,7 +86,3 @@ class Recipe:
             if word in INGREDIENT_LIST:
                 real_ingredients.append(word)
         return real_ingredients
-
-    
-
-
