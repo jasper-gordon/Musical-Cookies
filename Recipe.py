@@ -3,6 +3,7 @@ from Ingredient import Ingredient
 import random
 import lyricsgenius
 import numpy as np
+import FlavorPairingQuickstart as fpq
 
 genius = lyricsgenius.Genius("dEVN1E_5EEdG87GGOurKdFhPFkx-k-yTztAOSNJRkutxNoJmX4pI_38cBNPCUDTY")
 #genius.verbose = False
@@ -67,7 +68,8 @@ class Recipe:
                             n2 = part
                 if not n2:
                     continue
-                
+
+                score += fpq.similarity(n1, n2)
 
         return score
 
@@ -81,3 +83,5 @@ class Recipe:
         #Delete ingredient from recipe
         else:
             self.ingredient_list.remove(random.randint(2,len(self.ingredient_list))
+
+        return
