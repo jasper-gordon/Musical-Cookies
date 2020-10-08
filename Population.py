@@ -7,6 +7,14 @@ import sys
 import getopt
 from Webscraping import *
 from fractions import Fraction
+import numpy as np
+import lyricsgenius
+genius = lyricsgenius.Genius("dEVN1E_5EEdG87GGOurKdFhPFkx-k-yTztAOSNJRkutxNoJmX4pI_38cBNPCUDTY")
+#genius.verbose = False
+genius.remove_section_headers = True
+WORD_EMBED_VALS = np.load('ingred_word_emb.npy', allow_pickle=True).item()
+INGRED_CATEGORIES = np.load('ingred_categories.npy', allow_pickle=True).item()
+INGREDIENT_LIST = sorted(WORD_EMBED_VALS.keys())
 CONSTANT_MIN_PIVOT = 2  # crossover pivot will always be > 3,
 # first 3 indexes in a cookie recipe's ingredient list will be a flour, a sugar,
 # and a fat, which is needed to be present in every cookie recipe
@@ -201,3 +209,40 @@ class Population:
     def mutate(self):
         for i in range(0, len(self.population)):
             self.population[i].mutate(self.mutate_prob, self.knowledge_base)
+
+    
+
+#for i in INGREDIENT_LIST:
+    #print (i)
+
+#Method to check if any real ingredients in a song list
+#Returns a list of ingredients (strings)
+def ingredient_matcher(lyrics):
+    real_ingredients = []
+    for word in lyrics:
+        if word in INGREDIENT_LIST:
+            real_ingredients.append(word)
+    return real_ingredients
+
+#Gathers the lyrics for given int value of songs of the given artist
+#Returns the group of lyrics as a list of strings
+def lyric_gatherer(song_limit, artist_name):
+    lyric_list = []
+    try:
+        songs = genius.search_artist(artist_name, max_songs = song_limit, sort = "popularity" ).songs
+    except:
+        print("This artist input is invalid")
+        exit()
+    else:
+        print("made it this far")
+        for song in songs:
+            unique_lyrics = []
+            unfiltered_lyrics = song.lyrics.split()
+            #Only taking unique words from the lyrics to avoid repeats
+            for line in unfiltered_lyrics:
+                if line not in unique_lyrics:
+                    #Adjusts case to lower to make sure it is comparable to ingredient_list
+                    unique_lyrics.append(line.lower())
+            #Adding all new unique lyrics to the full list of the artist's lyrics
+            lyric_list.extend(unique_lyrics)
+        return lyric_list
