@@ -15,7 +15,7 @@ genius.remove_section_headers = True
 WORD_EMBED_VALS = np.load('ingred_word_emb.npy', allow_pickle=True).item()
 INGRED_CATEGORIES = np.load('ingred_categories.npy', allow_pickle=True).item()
 INGREDIENT_LIST = sorted(WORD_EMBED_VALS.keys())
-CONSTANT_MIN_PIVOT = 2  # crossover pivot will always be > 3,
+CONSTANT_MIN_PIVOT = 5  # crossover pivot will always be > 3,
 # first 3 indexes in a cookie recipe's ingredient list will be a flour, a sugar,
 # and a fat, which is needed to be present in every cookie recipe
 
@@ -60,32 +60,71 @@ class Population:
                     new_ingredient = Ingredient(words[2], float(Fraction(words[0])), words[1])
                     current_recipe.append(new_ingredient)
             # Setting flour and sugar to the front of the list
-            flour = Ingredient(None, None, None)
-            sugar = Ingredient(None, None, None)
+            flour = Ingredient('flour', 0, "cup")
+            sugar = Ingredient('sugar', 0, "cup")
+            butter = Ingredient('butter', 0, "cup")
+            egg = Ingredient('egg', 0, "")
+            salt = Ingredient('salt', 0, "teaspoons")
             flour_index = 0
             sugar_index = 0
+            butter_index = 0
+            egg_index = 0
+            salt_index = 0
+
             for ingredient in current_recipe:
                 if 'flour' in ingredient.name:
                     flour = ingredient
                     break
                 flour_index += 1
-            #print(flour_index)
-            #print("Recipe Length: " + str(len(current_recipe)))
 
-            if(len(current_recipe) == 4 or len(current_recipe) == 5):
-                continue
-                #print(current_recipe)
+            #if(len(current_recipe) == 4 or len(current_recipe) == 5):
+            #    continue
 
-            current_recipe.pop(flour_index)
+            if flour_index < len(current_recipe):
+                current_recipe.pop(flour_index)
 
             for ingredient in current_recipe:
                 if 'sugar' in ingredient.name:
                     sugar = ingredient
                     break
                 sugar_index += 1
-            current_recipe.pop(sugar_index)
+
+            if sugar_index < len(current_recipe):
+                current_recipe.pop(sugar_index)
+
+            for ingredient in current_recipe:
+                if 'butter' in ingredient.name:
+                    butter = ingredient
+                    break
+                butter_index += 1
+
+            if butter_index < len(current_recipe):
+                current_recipe.pop(butter_index)
+
+            for ingredient in current_recipe:
+                if 'egg' in ingredient.name:
+                    egg = ingredient
+                    break
+                egg_index += 1
+
+            if egg_index < len(current_recipe):
+                current_recipe.pop(egg_index)
+
+            for ingredient in current_recipe:
+                if 'salt' in ingredient.name:
+                    salt = ingredient
+                    break
+                salt_index += 1
+
+            if salt_index < len(current_recipe):
+                current_recipe.pop(salt_index)
+
+
             current_recipe.insert(0,sugar)
             current_recipe.insert(0,flour)
+            current_recipe.insert(0,butter)
+            current_recipe.insert(0,egg)
+            current_recipe.insert(0,salt)
 
             #new_recipe = Recipe(filename[15:-4], current_recipe)
             new_recipe = Recipe(cookie_name, current_recipe)
@@ -123,7 +162,7 @@ class Population:
             if item.amount == 0:
                 trash_list.append(item)
         for junk in trash_list:
-            best_cookie.ingredient_list.remove(junk.name)
+            best_cookie.ingredient_list.remove(junk)
         return best_cookie
 
     def select(self):
@@ -185,7 +224,7 @@ class Population:
         for i in range(0, len(self.population), 2):
             child1_list, child2_list = one_point_crossover(parents[i], parents[i+1])
 
-            
+
             child1 = Recipe(parents[i].name, child1_list)
             child2 = Recipe(parents[i + 1].name, child2_list)
             next_generation.append(child1)
@@ -200,7 +239,7 @@ class Population:
         for i in range(0, len(self.population)):
             self.population[i].mutate(self.mutate_prob, self.knowledge_base, self.artist_name)
 
-    
+
 
 #for i in INGREDIENT_LIST:
     #print (i)
@@ -222,7 +261,7 @@ def lyric_gatherer(song_limit, artist_name):
         songs = genius.search_artist(artist_name, max_songs = song_limit, sort = "popularity" ).songs
     except:
         print("This artist input is invalid")
-        return lyric_list 
+        return lyric_list
     else:
         print("made it this far")
         for song in songs:
@@ -248,5 +287,3 @@ def main():
     for item in song_ingredients:
         food = Ingredient(item, 1, "oz")
         knowledge_list.append(food)
-    
-        
