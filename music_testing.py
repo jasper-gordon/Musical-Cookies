@@ -71,14 +71,14 @@ def lyric_gatherer(song_limit, artist_name):
         return lyric_list
 
 
-artist = "aghemrjgrer"
-test_list = lyric_gatherer(5, artist)
+artist = "Green Day"
+test_list = lyric_gatherer(8, artist)
 
 print("Here are the lyrics by " + artist +
       " that are also known ingredients: ")
 if test_list is not None:
     print(*ingredient_matcher(test_list), sep=", ")
-print("yay made it")
+
 
 
 # Things we need to address:
