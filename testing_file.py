@@ -18,9 +18,10 @@ for item in song_ingredients:
     knowledge_list.append(food)
 
 
-mypop = Population(1, "https://www.tasteofhome.com/collection/the-best-cookie-recipes/", .3, knowledge_list)
-print (mypop.generate())
-
+mypop = Population(5, "https://www.tasteofhome.com/collection/the-best-cookie-recipes/", .3, knowledge_list, artist)
+best_recipe = mypop.generate()
+print (best_recipe)
+print ("And here is its score: " + str(best_recipe.evaluation))
 
 
 

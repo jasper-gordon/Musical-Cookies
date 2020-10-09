@@ -56,4 +56,3 @@ def request_pairing(ingr, threshold, cat=None):
         return pairing(ingr, threshold)
 
 
-print(request_pairing("lemon", .2))

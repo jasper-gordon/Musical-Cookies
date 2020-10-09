@@ -55,8 +55,8 @@ def web_scraper(url):
     
     #print(type(recipe_list[1][1]))
     #print(recipe_list)
-    print("Webscraper was called")
-    print(ingredient_dict)
+   
+    #print(ingredient_dict)
     return ingredient_dict
 
 def main():

@@ -22,12 +22,13 @@ CONSTANT_MIN_PIVOT = 2  # crossover pivot will always be > 3,
 
 class Population:
 
-    def __init__(self, generations, filepath_folder, mutate_prob, knowledge_base):
+    def __init__(self, generations, filepath_folder, mutate_prob, knowledge_base, artist_name):
         self.population = []
         self.knowledge_base = knowledge_base
         self.generations = generations
         self.mutate_prob = mutate_prob
         self.recipe_counter = 1
+        self.artist_name = artist_name
 
         #for filename in glob.glob(filepath_folder):
         #current_file = open(filename, "r")
@@ -117,7 +118,12 @@ class Population:
             for cookie in self.population:
                 if best_cookie.evaluation <= cookie.evaluation:
                     best_cookie = cookie
-
+        trash_list = []
+        for item in best_cookie.ingredient_list:
+            if item.amount == 0:
+                trash_list.append(item)
+        for junk in trash_list:
+            best_cookie.ingredient_list.remove(junk.name)
         return best_cookie
 
     def select(self):
@@ -179,28 +185,12 @@ class Population:
         for i in range(0, len(self.population), 2):
             child1_list, child2_list = one_point_crossover(parents[i], parents[i+1])
 
-            child1_name = ''
-            child2_name = ''
-
-            parent1_name = parents[i].name.split(' ')
-            parent2_name = parents[i+1].name.split(' ')
-
-            pivot1 = random.randint(1, len(parent1_name))
-            pivot2 = random.randint(1, len(parent2_name))
-
-            parent1_sublist1 = parent1_name[:pivot1]
-            parent1_sublist2 = parent1_name[pivot1:]
-            parent2_sublist1 = parent1_name[:pivot2]
-            parent2_sublist2 = parent1_name[pivot2:]
-
-            child1_name = " ".join(parent1_sublist1 + parent2_sublist2)
-            child2_name = " ".join(parent2_sublist1 + parent1_sublist2)
-
-            child1 = Recipe(child1_name, child1_list)
-            child2 = Recipe(child2_name, child2_list)
+            
+            child1 = Recipe(parents[i].name, child1_list)
+            child2 = Recipe(parents[i + 1].name, child2_list)
             next_generation.append(child1)
             next_generation.append(child2)
-
+            self.recipe_counter += 1
         self.population = next_generation
         # Every recipe needs flour, sugar, and an egg
         # basic_ingredients = {'flour': , 'sugar': , 'butter': }
@@ -208,7 +198,7 @@ class Population:
 
     def mutate(self):
         for i in range(0, len(self.population)):
-            self.population[i].mutate(self.mutate_prob, self.knowledge_base)
+            self.population[i].mutate(self.mutate_prob, self.knowledge_base, self.artist_name)
 
     
 

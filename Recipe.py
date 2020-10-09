@@ -15,14 +15,13 @@ INGREDIENT_LIST = sorted(WORD_EMBED_VALS.keys())
 class Recipe:
 
     """
-    An initiliazing method for any new object of the Recipe class that takes a string name, a list of Ingredient
-            objects, and a string Artist name as arguments.
+    An initiliazing method for any new object of the Recipe class that takes a string name and a list of Ingredient
+            objects as arguments.
     """
 
-    def __init__(self, name, ingredient_list, artist_name):
+    def __init__(self, name, ingredient_list):
         self.name = name
         self.ingredient_list = ingredient_list
-        self.artist_name = artist_name
         self.evaluation = self.evaluate()
 
     """
@@ -73,21 +72,28 @@ class Recipe:
 
         return score
 
-    def mutate(self, mutate_prob, knowledge_base):
+    def mutate(self, mutate_prob, knowledge_base, artist_name):
         #Add ingredient from song list, if ingredeint already there then add a pairing
+        basic_name = ""
+        name_strings =  [artist_name + "'s Famous", basic_name, "Cookies"]
+        r = random.uniform(0,1)
+        if r > mutate_prob:
+            pass
         if mutate_prob <= .4:
-            random_value = Random.randint(len(knowledge_base) - 1)
+            random_value = random.randint(0, len(knowledge_base) - 1)
             song_ingredient = knowledge_base[random_value]
             if song_ingredient in self.ingredient_list:
                 pairing_list = fpq.request_pairing(song_ingredient.name, .1)
                 
                 #NEED TO MAKE METHOD TO GENERATE BIASED LIST
                 
-                random_value2 = Random.randint(len(pairing_list) - 1)
-                pairing_ingredient = Ingredient(pairing_list[random_value2, 1, "oz"])
+                random_value2 = random.randint(0, len(pairing_list) - 1)
+                pairing_ingredient = Ingredient(pairing_list[random_value2], 1, "oz")
                 self.ingredient_list.append(pairing_ingredient)
             else:
                 self.ingredient_list.append(song_ingredient)
+                name_strings[1] = song_ingredient.name
+                self.name = " ".join(name_strings)
         #Swap ingredient with ingredient from song list
         elif mutate_prob <= .8:
             pass
