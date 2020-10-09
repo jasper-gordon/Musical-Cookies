@@ -93,6 +93,6 @@ class Recipe:
             pass
         #Delete ingredient from recipe
         else:
-            self.ingredient_list.remove(random.randint(2,len(self.ingredient_list) - 1)
+            self.ingredient_list.remove(random.randint(2,len(self.ingredient_list) - 1))
 
         
