@@ -16,3 +16,6 @@ class Ingredient:
 
     def get_amount(self):
         return self.amount
+
+    def __eq__(self, other):
+        return self.name == other.name

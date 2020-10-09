@@ -76,12 +76,23 @@ class Recipe:
     def mutate(self, mutate_prob, knowledge_base):
         #Add ingredient from song list, if ingredeint already there then add a pairing
         if mutate_prob <= .4:
-            pass
+            random_value = Random.randint(len(knowledge_base) - 1)
+            song_ingredient = knowledge_base[random_value]
+            if song_ingredient in self.ingredient_list:
+                pairing_list = fpq.request_pairing(song_ingredient.name, .1)
+                
+                #NEED TO MAKE METHOD TO GENERATE BIASED LIST
+                
+                random_value2 = Random.randint(len(pairing_list) - 1)
+                pairing_ingredient = Ingredient(pairing_list[random_value2, 1, "oz"])
+                self.ingredient_list.append(pairing_ingredient)
+            else:
+                self.ingredient_list.append(song_ingredient)
         #Swap ingredient with ingredient from song list
         elif mutate_prob <= .8:
             pass
         #Delete ingredient from recipe
         else:
-            self.ingredient_list.remove(random.randint(2,len(self.ingredient_list))
+            self.ingredient_list.remove(random.randint(2,len(self.ingredient_list) - 1)
 
-        return
+        

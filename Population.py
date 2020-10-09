@@ -22,9 +22,9 @@ CONSTANT_MIN_PIVOT = 2  # crossover pivot will always be > 3,
 
 class Population:
 
-    def __init__(self, generations, filepath_folder, mutate_prob):
+    def __init__(self, generations, filepath_folder, mutate_prob, knowledge_base):
         self.population = []
-        self.knowledge_base = []
+        self.knowledge_base = knowledge_base
         self.generations = generations
         self.mutate_prob = mutate_prob
         self.recipe_counter = 1
@@ -115,7 +115,7 @@ class Population:
             self.mutate()
 
             for cookie in self.population:
-                if best_cookie.evaluate() <= cookie.evaluate():
+                if best_cookie.evaluation <= cookie.evaluation:
                     best_cookie = cookie
 
         return best_cookie
@@ -246,3 +246,17 @@ def lyric_gatherer(song_limit, artist_name):
             #Adding all new unique lyrics to the full list of the artist's lyrics
             lyric_list.extend(unique_lyrics)
         return lyric_list
+
+def main():
+    knowledge_list = []
+    artist = "Jimmy Buffett"
+    lyrics = lyric_gatherer(4, artist)
+    song_ingredients = ingredient_matcher(lyrics)
+
+    #ADD USER INPUT REPEATED REQUESTS FOR BAD INPUT
+
+    for item in song_ingredients:
+        food = Ingredient(item, 1, "oz")
+        knowledge_list.append(food)
+    
+        

@@ -28,6 +28,7 @@ def pairing(ingr, threshold, cat=None):
     belong.
     """
     pairings = {}
+    output = []
     ilist = list(set(INGREDIENT_LIST) - set([ingr]))
     for i in ilist:
         if similarity(ingr, i) >= threshold:
@@ -39,29 +40,20 @@ def pairing(ingr, threshold, cat=None):
                 pairings[i] = similarity(ingr, i)
     for key, value in sorted(pairings.items(), key=lambda kv: (kv[1],kv[0]), \
     reverse=True):
-        print(key, value)
+        output.append(key)
+    output.reverse()   
+    #Outputs in order of worst to best
+    return output
 
 
 def request_pairing(ingr, threshold, cat=None):
     """Displays a specific pairing to the user in a readable way."""
     if cat:
-        print("\nWhat pairs well with " + ingr + " that is a " + cat + "?")
-        pairing(ingr, threshold, cat)
+        #print("\nWhat pairs well with " + ingr + " that is a " + cat + "?")
+        return pairing(ingr, threshold, cat)
     else:
-        print("\nWhat pairs well with " + ingr + "?")
-        pairing(ingr, threshold)
+        #print("\nWhat pairs well with " + ingr + "?")
+        return pairing(ingr, threshold)
 
 
-def main():
-    print("* * * Here are some examples of searching for Western flavor \
-pairings: * * *")
-    request_pairing("orange", 0.1, "herb")
-    request_pairing("chocolate", 0.1, "spice")
-    request_pairing("green tea", 0.6, "fruit")
-    request_pairing("coffee", 0.45)
-    #print(INGREDIENT_LIST)
-    #print(INGRED_CATEGORIES)
-
-
-if __name__ == "__main__":
-    main()
+print(request_pairing("lemon", .2))
