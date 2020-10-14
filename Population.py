@@ -15,7 +15,7 @@ genius.remove_section_headers = True
 WORD_EMBED_VALS = np.load('ingred_word_emb.npy', allow_pickle=True).item()
 INGRED_CATEGORIES = np.load('ingred_categories.npy', allow_pickle=True).item()
 INGREDIENT_LIST = sorted(WORD_EMBED_VALS.keys())
-CONSTANT_MIN_PIVOT = 5  # crossover pivot will always be > 3,
+CONSTANT_MIN_PIVOT = 6  # crossover pivot will always be > 3,
 # first 3 indexes in a cookie recipe's ingredient list will be a flour, a sugar,
 # and a fat, which is needed to be present in every cookie recipe
 
@@ -59,65 +59,102 @@ class Population:
                 if is_num:
                     new_ingredient = Ingredient(words[2], float(Fraction(words[0])), words[1])
                     current_recipe.append(new_ingredient)
+
+
+            def essential_ingredient(ingredient_obj, recipe):
+                index = 0
+                essential_obj = None
+                for ingredient in recipe:
+                    if ingredient_obj.name in ingredient.name:
+                        essential_obj = ingredient
+                        break
+                    index += 1
+
+                if index < len(recipe):
+                    recipe.pop(index)
+
+                if not essential_obj:
+                    return ingredient_obj, recipe
+                else:
+                    return essential_obj, recipe
+
             # Setting flour and sugar to the front of the list
             flour = Ingredient('flour', 0, "cup")
             sugar = Ingredient('sugar', 0, "cup")
             butter = Ingredient('butter', 0, "cup")
             egg = Ingredient('egg', 0, "")
             salt = Ingredient('salt', 0, "teaspoons")
-            flour_index = 0
-            sugar_index = 0
-            butter_index = 0
-            egg_index = 0
-            salt_index = 0
+            vanilla_extract = Ingredient('vanilla extract', 0, "teaspoons")
+            # flour_index = 0
+            # sugar_index = 0
+            # butter_index = 0
+            # egg_index = 0
+            # salt_index = 0
+            # vanilla_extract_index = 0
 
-            for ingredient in current_recipe:
-                if 'flour' in ingredient.name:
-                    flour = ingredient
-                    break
-                flour_index += 1
+            flour, current_recipe = essential_ingredient(flour, current_recipe)
+            sugar, current_recipe = essential_ingredient(sugar, current_recipe)
+            butter, current_recipe = essential_ingredient(butter, current_recipe)
+            egg, current_recipe = essential_ingredient(egg, current_recipe)
+            salt, current_recipe = essential_ingredient(salt, current_recipe)
+            vanilla_extract, current_recipe = essential_ingredient(vanilla_extract, current_recipe)
 
-            #if(len(current_recipe) == 4 or len(current_recipe) == 5):
-            #    continue
-
-            if flour_index < len(current_recipe):
-                current_recipe.pop(flour_index)
-
-            for ingredient in current_recipe:
-                if 'sugar' in ingredient.name:
-                    sugar = ingredient
-                    break
-                sugar_index += 1
-
-            if sugar_index < len(current_recipe):
-                current_recipe.pop(sugar_index)
-
-            for ingredient in current_recipe:
-                if 'butter' in ingredient.name:
-                    butter = ingredient
-                    break
-                butter_index += 1
-
-            if butter_index < len(current_recipe):
-                current_recipe.pop(butter_index)
-
-            for ingredient in current_recipe:
-                if 'egg' in ingredient.name:
-                    egg = ingredient
-                    break
-                egg_index += 1
-
-            if egg_index < len(current_recipe):
-                current_recipe.pop(egg_index)
-
-            for ingredient in current_recipe:
-                if 'salt' in ingredient.name:
-                    salt = ingredient
-                    break
-                salt_index += 1
-
-            if salt_index < len(current_recipe):
-                current_recipe.pop(salt_index)
+            # for ingredient in current_recipe:
+            #     if 'flour' in ingredient.name:
+            #         flour = ingredient
+            #         break
+            #     flour_index += 1
+            #
+            # #if(len(current_recipe) == 4 or len(current_recipe) == 5):
+            # #    continue
+            #
+            # if flour_index < len(current_recipe):
+            #     current_recipe.pop(flour_index)
+            #
+            # for ingredient in current_recipe:
+            #     if 'sugar' in ingredient.name:
+            #         sugar = ingredient
+            #         break
+            #     sugar_index += 1
+            #
+            # if sugar_index < len(current_recipe):
+            #     current_recipe.pop(sugar_index)
+            #
+            # for ingredient in current_recipe:
+            #     if 'butter' in ingredient.name:
+            #         butter = ingredient
+            #         break
+            #     butter_index += 1
+            #
+            # if butter_index < len(current_recipe):
+            #     current_recipe.pop(butter_index)
+            #
+            # for ingredient in current_recipe:
+            #     if 'egg' in ingredient.name:
+            #         egg = ingredient
+            #         break
+            #     egg_index += 1
+            #
+            # if egg_index < len(current_recipe):
+            #     current_recipe.pop(egg_index)
+            #
+            # for ingredient in current_recipe:
+            #     if 'salt' in ingredient.name:
+            #         salt = ingredient
+            #         break
+            #     salt_index += 1
+            #
+            # if salt_index < len(current_recipe):
+            #     current_recipe.pop(salt_index)
+            #
+            # for ingredient in current_recipe:
+            #     if 'vanilla' in ingredient.name:
+            #         vanilla_extract = ingredient
+            #         break
+            #     vanilla_extract_index += 1
+            #
+            # if vanilla_extract_index < len(current_recipe):
+            #     current_recipe.pop(vanilla_extract_index)
 
 
             current_recipe.insert(0,sugar)
@@ -125,6 +162,7 @@ class Population:
             current_recipe.insert(0,butter)
             current_recipe.insert(0,egg)
             current_recipe.insert(0,salt)
+            current_recipe.insert(0,vanilla_extract)
 
             #new_recipe = Recipe(filename[15:-4], current_recipe)
             new_recipe = Recipe(cookie_name, current_recipe)
@@ -219,6 +257,7 @@ class Population:
             cleaned_recipe2 = clean(new_recipe2_list)
 
             return cleaned_recipe1, cleaned_recipe2
+
 
         # Go through shuffled breeding_pool and picks pairs
         for i in range(0, len(self.population), 2):
