@@ -49,15 +49,6 @@ def web_scraper(url):
 
         ingredient_dict_constructor(link_list, i, ingredient_dict)
     
-    """
-    for key, value in ingredient_dict.items():
-        for ingredient in value:
-            if ingredient == "1 large egg":
-                print(ingredient)
-            if ingredient == "FROSTING:":
-                print(ingredient)
-                """
-    
     return ingredient_dict
 
 def ingredient_dict_constructor(link_list, i, ingredient_dict):
@@ -99,7 +90,7 @@ def ingredient_dict_constructor(link_list, i, ingredient_dict):
 
 def main():
 
-    print(web_scraper(sys.argv[1]))
+    web_scraper(sys.argv[1])
 
 if __name__ == "__main__":
     main()
