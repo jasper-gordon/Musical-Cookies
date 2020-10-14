@@ -84,9 +84,9 @@ class Recipe:
             song_ingredient = knowledge_base[random_value]
             if song_ingredient in self.ingredient_list:
                 pairing_list = fpq.request_pairing(song_ingredient.name, .1)
-                
+
                 #NEED TO MAKE METHOD TO GENERATE BIASED LIST
-                
+
                 random_value2 = random.randint(0, len(pairing_list) - 1)
                 pairing_ingredient = Ingredient(pairing_list[random_value2], 1, "oz")
                 self.ingredient_list.append(pairing_ingredient)
@@ -94,11 +94,10 @@ class Recipe:
                 self.ingredient_list.append(song_ingredient)
                 name_strings[1] = song_ingredient.name
                 self.name = " ".join(name_strings)
-        #Swap ingredient with ingredient from song list
+         #Swap ingredient with ingredient from song list
         elif mutate_prob <= .8:
             pass
         #Delete ingredient from recipe
         else:
             self.ingredient_list.remove(random.randint(2,len(self.ingredient_list) - 1))
-
         
