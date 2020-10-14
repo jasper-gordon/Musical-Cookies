@@ -1,45 +1,46 @@
-
+"""Names: Vincent Dong, Tenzin Choezin, Jasper Gordon
+Course: CSCI 3725
+Assignment: PQ2
+Date: 10/13/2020
+Description: This file handles the Recipe class. The class constructor takes a name, and list of ingredient objects
+        as arguments. The purpose of the class is to build Recipe objects which can be used and manipulated by
+        the Population class to build Recipe objects with new combinations of Ingredients and amounts."""
 from Ingredient import Ingredient
 import random
 import lyricsgenius
 import numpy as np
 import FlavorPairingQuickstart as fpq
 
-genius = lyricsgenius.Genius("dEVN1E_5EEdG87GGOurKdFhPFkx-k-yTztAOSNJRkutxNoJmX4pI_38cBNPCUDTY")
-#genius.verbose = False
-genius.remove_section_headers = True
+#Setting up and using the lyric genius API from: https://docs.genius.com/
+#Using Flavor Similarity & Food Category Datasets
 WORD_EMBED_VALS = np.load('ingred_word_emb.npy', allow_pickle=True).item()
 INGRED_CATEGORIES = np.load('ingred_categories.npy', allow_pickle=True).item()
 INGREDIENT_LIST = sorted(WORD_EMBED_VALS.keys())
 
 class Recipe:
 
-    """
-    An initiliazing method for any new object of the Recipe class that takes a string name and a list of Ingredient
-            objects as arguments.
-    """
+    """An initiliazing method for any new object of the Recipe class that takes a string name and a list of Ingredient
+            objects as arguments."""
 
     def __init__(self, name, ingredient_list):
         self.name = name
         self.ingredient_list = ingredient_list
         self.evaluation = self.evaluate()
 
-    """
-    #Returns a string representation of this Recipe.
-    """
+    """Returns a string representation of this Recipe."""
     def __str__(self):
         output = self.name + "\n"
         for i in self.ingredient_list:
             output += str(i) + "\n"
         return output[:-1]
 
-    """
-    A comparison method to the current Recipe object to another using their respective fitness amounts.
-    Returns a boolean
-    """
+    """A comparison method to the current Recipe object to another using their respective fitness amounts.
+    Returns a boolean"""
     def __lt__(self, other):
         return self.evaluation < other.evaluation
 
+    """A method to determine the value of the recipe object. A recipe is score is based off
+            the sum of the ingredient paring scores of its ingredients.using the """
     def evaluate(self):
         score = 0.0
         for ingredient1 in self.ingredient_list:
@@ -71,7 +72,9 @@ class Recipe:
                 score += fpq.similarity(n1, n2)
 
         return score
-
+    """Method to mutate a the Recipe object in a variety ways.
+            Args: a mutation probability which is a float value between 0 and 1 to determine mutation,
+            a knowledge base which is a list of known Ingredient objects, an artist a name which is a string. """
     def mutate(self, mutate_prob, knowledge_base, artist_name):
         #Add ingredient from song list, if ingredeint already there then add a pairing
         basic_name = ""
