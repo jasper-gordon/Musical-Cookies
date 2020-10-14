@@ -3,8 +3,8 @@ Course: CSCI 3725
 Assignment: PQ2
 Date: 10/13/2020
 Description: This file handles the Recipe class. The class constructor takes a name, and list of ingredient objects
-        as arguments. The purpose of the class is to build Recipe objects which can be used and manipulated by
-        the Population class to build Recipe objects with new combinations of Ingredients and amounts."""
+    as arguments. The purpose of the class is to build Recipe objects which can be used and manipulated by
+    the Population class to build Recipe objects with new combinations of Ingredients and amounts."""
 from Ingredient import Ingredient
 import random
 import lyricsgenius
@@ -22,7 +22,7 @@ class Recipe:
 
 
     def __init__(self, name, ingredient_list):
-         """An initiliazing method for any new object of the Recipe class that takes a string name and a list of Ingredient
+        """An initiliazing method for any new object of the Recipe class that takes a string name and a list of Ingredient
             objects as arguments."""
         self.name = name
         self.ingredient_list = ingredient_list
@@ -37,7 +37,7 @@ class Recipe:
 
     def __lt__(self, other):
         """A comparison method to the current Recipe object to another using their respective fitness amounts.
-    Returns a boolean"""
+        Returns a boolean"""
         return self.evaluation < other.evaluation
 
     def evaluate(self):
@@ -92,13 +92,13 @@ class Recipe:
         else:
             mutation_type_prob = random.uniform(0,1)
             if mutation_type_prob <= .4:
-                song_ingredient_add(knowledge_base, name_strings)
+                self.song_ingredient_add(knowledge_base, name_strings)
             #Swap ingredient with ingredient from song list
             elif mutation_type_prob <= .8:
                 pass
             #Delete ingredient from recipe
             else:
-                self.ingredient_list.remove(random.randint(2,len(self.ingredient_list) - 1))
+                self.ingredient_list.pop(random.randint(2,len(self.ingredient_list) - 1))
         
     def song_ingredient_add(self, knowledge_base, name_strings):
         """Executes a mutation where it adds an Ingredient object to the Recipe from the
