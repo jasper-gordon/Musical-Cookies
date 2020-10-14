@@ -17,6 +17,7 @@ WORD_EMBED_VALS = np.load('ingred_word_emb.npy', allow_pickle=True).item()
 INGRED_CATEGORIES = np.load('ingred_categories.npy', allow_pickle=True).item()
 INGREDIENT_LIST = sorted(WORD_EMBED_VALS.keys())
 
+
 class Recipe:
 
     """An initiliazing method for any new object of the Recipe class that takes a string name and a list of Ingredient
@@ -82,25 +83,30 @@ class Recipe:
         r = random.uniform(0,1)
         if r > mutate_prob:
             pass
-        if mutate_prob <= .4:
-            random_value = random.randint(0, len(knowledge_base) - 1)
-            song_ingredient = knowledge_base[random_value]
-            if song_ingredient in self.ingredient_list:
-                pairing_list = fpq.request_pairing(song_ingredient.name, .1)
-
-                #NEED TO MAKE METHOD TO GENERATE BIASED LIST
-
-                random_value2 = random.randint(0, len(pairing_list) - 1)
-                pairing_ingredient = Ingredient(pairing_list[random_value2], 1, "oz")
-                self.ingredient_list.append(pairing_ingredient)
-            else:
-                self.ingredient_list.append(song_ingredient)
-                name_strings[1] = song_ingredient.name
-                self.name = " ".join(name_strings)
-         #Swap ingredient with ingredient from song list
-        elif mutate_prob <= .8:
-            pass
-        #Delete ingredient from recipe
         else:
-            self.ingredient_list.remove(random.randint(2,len(self.ingredient_list) - 1))
+            mutation_type_prob = random.uniform(0,1)
+            if mutation_type_prob <= .4:
+                song_ingredient_add(knowledge_base, name_strings)
+            #Swap ingredient with ingredient from song list
+            elif mutation_type_prob <= .8:
+                pass
+            #Delete ingredient from recipe
+            else:
+                self.ingredient_list.remove(random.randint(2,len(self.ingredient_list) - 1))
         
+    def song_ingredient_add(self, knowledge_base, name_strings):
+        random_value = random.randint(0, len(knowledge_base) - 1)
+        song_ingredient = knowledge_base[random_value]
+        if song_ingredient in self.ingredient_list:
+            pairing_list = fpq.request_pairing(song_ingredient.name, .1)
+
+            #NEED TO MAKE METHOD TO GENERATE BIASED LIST
+
+            random_value2 = random.randint(0, len(pairing_list) - 1)
+            pairing_ingredient = Ingredient(pairing_list[random_value2], 1, "oz")
+            self.ingredient_list.append(pairing_ingredient)
+        else:
+            self.ingredient_list.append(song_ingredient)
+            name_strings[1] = song_ingredient.name
+            self.name = " ".join(name_strings)
+
