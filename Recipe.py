@@ -91,11 +91,8 @@ class Recipe:
         #Choosing which mutation to execute
         else:
             mutation_type_prob = random.uniform(0,1)
-            if mutation_type_prob <= .4:
+            if mutation_type_prob <= .6:
                 self.song_ingredient_add(knowledge_base, name_strings)
-            #Swap ingredient with ingredient from song list
-            elif mutation_type_prob <= .8:
-                pass
             #Delete ingredient from recipe
             else:
                 self.ingredient_list.pop(random.randint(2,len(self.ingredient_list) - 1))
