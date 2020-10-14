@@ -7,8 +7,8 @@ from Population import ingredient_matcher
 #mypop = Population(1, "practice_input/*.txt", .3)
 
 knowledge_list = []
-artist = "Jimmy Buffett"
-lyrics = lyric_gatherer(4, artist)
+artist = "Weird Al"
+lyrics = lyric_gatherer(8, artist)
 song_ingredients = ingredient_matcher(lyrics)
 
 #ADD USER INPUT REPEATED REQUESTS FOR BAD INPUT
@@ -18,7 +18,7 @@ for item in song_ingredients:
     knowledge_list.append(food)
 
 
-mypop = Population(5, "https://www.tasteofhome.com/collection/the-best-cookie-recipes/", .3, knowledge_list, artist)
+mypop = Population(3, "https://www.tasteofhome.com/collection/the-best-cookie-recipes/", .3, knowledge_list, artist)
 best_recipe = mypop.generate()
 print (best_recipe)
 print ("And here is its score: " + str(best_recipe.evaluation))
