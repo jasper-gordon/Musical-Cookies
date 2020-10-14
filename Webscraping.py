@@ -49,6 +49,15 @@ def web_scraper(url):
 
         ingredient_dict_constructor(link_list, i, ingredient_dict)
     
+    """
+    for key, value in ingredient_dict.items():
+        for ingredient in value:
+            if ingredient == "1 large egg":
+                print(ingredient)
+            if ingredient == "FROSTING:":
+                print(ingredient)
+                """
+    
     return ingredient_dict
 
 def ingredient_dict_constructor(link_list, i, ingredient_dict):
@@ -76,17 +85,21 @@ def ingredient_dict_constructor(link_list, i, ingredient_dict):
     # access the recipes
     for recipe in soup.find('ul', {"class": "recipe-ingredients__list recipe-ingredients__collection splitColumns"}):
 
+        
         for ingredient in recipe:
 
             # makes sure we get actual ingredients added to the ingredient list
             if ingredient != soup.find('b', {"class": "sIngredient"}):
                 ingredient_list.append(str(ingredient))
+    
+    if recipe_name == "Raspberry Ribbons":
+        ingredient_list = ingredient_list[:8]
 
     ingredient_dict[recipe_name] = ingredient_list
 
 def main():
 
-    web_scraper(sys.argv[1])
+    print(web_scraper(sys.argv[1]))
 
 if __name__ == "__main__":
     main()
