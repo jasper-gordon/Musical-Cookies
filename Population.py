@@ -195,12 +195,18 @@ class Population:
             for cookie in self.population:
                 if best_cookie.evaluation <= cookie.evaluation:
                     best_cookie = cookie
+
         trash_list = []
         for item in best_cookie.ingredient_list:
             if item.amount == 0:
                 trash_list.append(item)
         for junk in trash_list:
             best_cookie.ingredient_list.remove(junk)
+
+        ing_name = best_cookie.ingredient_list[-1].name.capitalize()
+        name_strings = [self.artist_name + "'s Famous", ing_name, "Cookies"]
+        best_cookie.name = " ".join(name_strings)
+
         return best_cookie
 
     def select(self):
@@ -245,7 +251,7 @@ class Population:
                 unique_ingredients = []
                 for ingredient in recipe:
                     if ingredient.name in ingredient_dict:
-                        ingredient_dict[ingredient.name] += ingredient.amount
+                        ingredient_dict[ingredient.name] += (ingredient.amount/4)
                     else:
                         ingredient_dict[ingredient.name] = ingredient.amount
                         unique_ingredients.append(ingredient)

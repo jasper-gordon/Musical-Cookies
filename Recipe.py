@@ -16,6 +16,7 @@ import FlavorPairingQuickstart as fpq
 WORD_EMBED_VALS = np.load('ingred_word_emb.npy', allow_pickle=True).item()
 INGRED_CATEGORIES = np.load('ingred_categories.npy', allow_pickle=True).item()
 INGREDIENT_LIST = sorted(WORD_EMBED_VALS.keys())
+CONSTANT_MIN_PIVOT = 6
 
 
 class Recipe:
@@ -44,7 +45,7 @@ class Recipe:
         """A method to determine the value of the recipe object. A recipe score is based off
             the sum of the ingredient paring scores of its ingredients. Method calculates the
             scores of every pairing of ingredients within the recipe where both ingredients
-            are in the knonw ingreedient list so that they are in the pairing database. 
+            are in the known ingreedient list so that they are in the pairing database.
             Returns the overall score of the Recipe. """
         score = 0.0
         for ingredient1 in self.ingredient_list:
@@ -77,7 +78,7 @@ class Recipe:
                 #Calculating the score of the pairing between the two distinct ingredients
                 score += fpq.similarity(n1, n2)
         return score
-    
+
     def mutate(self, mutate_prob, knowledge_base, artist_name):
         """Method to mutate a the Recipe object in a variety ways.
             Args: a mutation probability which is a float value between 0 and 1 to determine mutation,
@@ -91,18 +92,18 @@ class Recipe:
         #Choosing which mutation to execute
         else:
             mutation_type_prob = random.uniform(0,1)
-            if mutation_type_prob <= .6:
+            if mutation_type_prob <= .9:
                 self.song_ingredient_add(knowledge_base, name_strings)
             #Delete ingredient from recipe
             else:
-                self.ingredient_list.pop(random.randint(2,len(self.ingredient_list) - 1))
-        
+                self.ingredient_list[(random.randint(CONSTANT_MIN_PIVOT,len(self.ingredient_list) - 1))].amount = 0
+
     def song_ingredient_add(self, knowledge_base, name_strings):
         """Executes a mutation where it adds an Ingredient object to the Recipe from the
                 song ingredient list if the ingredient is not already in the Recipe.
                 If it is, then instead it adds an ingredient that pairs with the
                 chosen song ingredient.
-                Args: the knowledge base which is a lsit of known Ingredients, and 
+                Args: the knowledge base which is a list of known Ingredients, and
                 the name strings which holds the name of the Recipe. """
         random_value = random.randint(0, len(knowledge_base) - 1)
         song_ingredient = knowledge_base[random_value]
@@ -118,4 +119,3 @@ class Recipe:
             self.ingredient_list.append(song_ingredient)
             name_strings[1] = song_ingredient.name
             self.name = " ".join(name_strings)
-
