@@ -223,8 +223,8 @@ class Population:
                 unique_ingredients = []
                 for ingredient in recipe:
                     if ingredient.name in ingredient_dict:
-                        ingredient_dict[ingredient.name] += (ingredient.amount/4)
-                        # Divide by 4 so we don't overstack a single ingredient amount
+                        ingredient_dict[ingredient.name] += (ingredient.amount/self.generations)
+                        # Divide by number of generations so we don't overstack a single ingredient amount
                     else:
                         ingredient_dict[ingredient.name] = ingredient.amount
                         unique_ingredients.append(ingredient)
