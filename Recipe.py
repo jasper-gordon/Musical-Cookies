@@ -1,7 +1,7 @@
 """Names: Vincent Dong, Tenzin Choezin, Jasper Gordon
 Course: CSCI 3725
 Assignment: PQ2
-Date: 10/13/2020
+Date: 10/15/2020
 Description: This file handles the Recipe class. The class constructor takes a name, and list of ingredient objects
     as arguments. The purpose of the class is to build Recipe objects which can be used and manipulated by
     the Population class to build Recipe objects with new combinations of Ingredients and amounts."""
@@ -12,7 +12,7 @@ import numpy as np
 import FlavorPairingQuickstart as fpq
 
 #Setting up and using the lyric genius API from: https://docs.genius.com/
-#Using Flavor Similarity & Food Category Datasets
+#Using Flavor Simularity & Food Category Datasets
 WORD_EMBED_VALS = np.load('ingred_word_emb.npy', allow_pickle=True).item()
 INGRED_CATEGORIES = np.load('ingred_categories.npy', allow_pickle=True).item()
 INGREDIENT_LIST = sorted(WORD_EMBED_VALS.keys())
@@ -35,6 +35,12 @@ class Recipe:
         for i in self.ingredient_list:
             output += str(i) + "\n"
         return output[:-1]
+
+    def __repr__(self):
+        """
+        Returns an object of the same value.
+        """
+        return "Recipe('{0}', '{1}')".format(self.name, self.ingredient_list)
 
     def __lt__(self, other):
         """A comparison method to the current Recipe object to another using their respective fitness amounts.

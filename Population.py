@@ -34,6 +34,7 @@ CONSTANT_MIN_PIVOT = 6  # crossover pivot will always be >= 6,
 
 class Population:
 
+
     def __init__(self, generations, recipes_url, mutate_prob, knowledge_base, artist_name):
         """
         Population constructor, which takes in generations (int), recipes_url
@@ -55,22 +56,16 @@ class Population:
             for element in cookie_dict[cookie_name]:
                 #line = line.strip()
                 words = element.split(" ", 2)
-
                 #PROBLEM AREA - Trying to check if - is in string and if so remove that portion of the stirng (i.e. 2-1/2 becomes 2)
                 if "-" in words[0]:
-
                     words[0] = words[0].split("-")[0] #Takes the lower bound of the ingredient amount
-
                 # Dealing with lines with no units (exp "2 eggs")
                 if len(words) == 2:
                     words.append (" ")
                  # Creating new Ingredient object with name, quantity, and unit
-
                 is_num = False
-
                 if words[0][0].isdigit():
                     is_num = True
-
                 if is_num:
                     new_ingredient = Ingredient(words[2], float(Fraction(words[0])), words[1])
                     current_recipe.append(new_ingredient)
@@ -94,7 +89,6 @@ class Population:
                     return ingredient_obj, recipe
                 else:
                     return essential_obj, recipe
-
             # Essential Ingredient Objects
             flour = Ingredient('flour', 0, "cup")
             sugar = Ingredient('sugar', 0, "cup")
@@ -102,14 +96,12 @@ class Population:
             egg = Ingredient('egg', 0, "")
             salt = Ingredient('salt', 0, "teaspoons")
             vanilla_extract = Ingredient('vanilla extract', 0, "teaspoons")
-
             flour, current_recipe = essential_ingredient(flour, current_recipe)
             sugar, current_recipe = essential_ingredient(sugar, current_recipe)
             butter, current_recipe = essential_ingredient(butter, current_recipe)
             egg, current_recipe = essential_ingredient(egg, current_recipe)
             salt, current_recipe = essential_ingredient(salt, current_recipe)
             vanilla_extract, current_recipe = essential_ingredient(vanilla_extract, current_recipe)
-
             # Insert essential ingredients to front of current_recipe
             current_recipe.insert(0,sugar)
             current_recipe.insert(0,flour)
@@ -117,7 +109,6 @@ class Population:
             current_recipe.insert(0,egg)
             current_recipe.insert(0,salt)
             current_recipe.insert(0,vanilla_extract)
-
             new_recipe = Recipe(cookie_name, current_recipe)
             self.population.append(new_recipe)
 
@@ -145,11 +136,9 @@ class Population:
             self.select()
             self.crossover()
             self.mutate()
-
             for cookie in self.population:
                 if best_cookie.evaluation <= cookie.evaluation:
                     best_cookie = cookie
-
         #Cleaning the best cookie's ingredient list, by removing ingredients with 0 amount
         trash_list = []
         for item in best_cookie.ingredient_list:
@@ -157,33 +146,27 @@ class Population:
                 trash_list.append(item)
         for junk in trash_list:
             best_cookie.ingredient_list.remove(junk)
-
         #Naming the best cookie
         ing_name = best_cookie.ingredient_list[-1].name.capitalize()
         name_strings = [self.artist_name + "'s Famous", ing_name, "Cookies"]
         best_cookie.name = " ".join(name_strings)
-
         return best_cookie
 
     def select(self):
         """
         Method that selects the breeding pool from current population, using Rank Selection.
         """
-
         recipes = self.population
         sample_list = []
         breeding_pool = []
-
         ranked_recipes = sorted(recipes) #Sorted by evaluation score
         rank = 1
         for recipe in ranked_recipes:
             sample_list = sample_list + rank*[recipe]
             rank += 1
-
         for i in range(0, len(self.population)):
             random.shuffle(sample_list)  # Randomly shuffles list
             breeding_pool.append(sample_list[0])
-
         self.population = breeding_pool
 
     def crossover(self):
@@ -199,18 +182,15 @@ class Population:
             Helper method that performs crossover on two recipe objects.
             Returns two new ingredient lists
             """
-
             # Pivot always >= CONSTANT_MIN_PIVOT, which is the number of essential ingredients
             #   at the front of every recipe object's ingredient_list
             pivot1 = random.randint((CONSTANT_MIN_PIVOT), len(parent1.ingredient_list) - 1)
             pivot2 = random.randint(CONSTANT_MIN_PIVOT, len(
                 parent2.ingredient_list) - 1)
-
             parent1_sublist1 = parent1.ingredient_list[:pivot1]
             parent1_sublist2 = parent1.ingredient_list[pivot1:]
             parent2_sublist1 = parent2.ingredient_list[:pivot2]
             parent2_sublist2 = parent2.ingredient_list[pivot2:]
-
             new_recipe1_list = parent1_sublist1 + parent2_sublist2
             new_recipe2_list = parent2_sublist1 + parent1_sublist2
 
@@ -230,22 +210,16 @@ class Population:
                 for ingredient in unique_ingredients:
                     ingredient.amount = ingredient_dict[ingredient.name]
                 return unique_ingredients
-
             cleaned_recipe1 = clean(new_recipe1_list)
             cleaned_recipe2 = clean(new_recipe2_list)
-
             return cleaned_recipe1, cleaned_recipe2
-
-
         # Go through shuffled breeding_pool and picks pairs
         for i in range(0, len(self.population), 2):
             child1_list, child2_list = one_point_crossover(parents[i], parents[i+1])
-
             child1 = Recipe(parents[i].name, child1_list)
             child2 = Recipe(parents[i + 1].name, child2_list)
             next_generation.append(child1)
             next_generation.append(child2)
-
         self.population = next_generation
 
     def mutate(self):
@@ -256,18 +230,22 @@ class Population:
         for i in range(0, len(self.population)):
             self.population[i].mutate(self.mutate_prob, self.knowledge_base, self.artist_name)
 
-#Method to check if any real ingredients in a song list
-#Returns a list of ingredients (strings)
 def ingredient_matcher(lyrics):
+    """
+    Checks to see if any real ingredients are in the given song list which is an argument.
+        Returns a list of Ingredient objects
+    """
     real_ingredients = []
     for word in lyrics:
         if word in INGREDIENT_LIST:
             real_ingredients.append(word)
     return real_ingredients
 
-#Gathers the lyrics for given int value of songs of the given artist
-#Returns the group of lyrics as a list of strings
 def lyric_gatherer(song_limit, artist_name):
+    """
+    Gathers the lyrics from the given number (song_limit) of the given artsit's (artist_name) most\
+        popular songs. Returns the lyrics from those songs combined in one large list of strings
+    """
     lyric_list = []
     try:
         songs = genius.search_artist(artist_name, max_songs = song_limit, sort = "popularity" ).songs
