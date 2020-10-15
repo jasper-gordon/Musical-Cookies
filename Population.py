@@ -49,7 +49,6 @@ class Population:
         #for filename in glob.glob(recipes_url):
         #current_file = open(filename, "r")
         # calling web scrpaing method from the Webscraping file, giving it URL
-        print("Me no resist cookies.")
         cookie_dict = web_scraper(recipes_url)
         for cookie_name in cookie_dict:
             current_recipe = []
@@ -257,11 +256,6 @@ class Population:
         for i in range(0, len(self.population)):
             self.population[i].mutate(self.mutate_prob, self.knowledge_base, self.artist_name)
 
-
-
-#for i in INGREDIENT_LIST:
-    #print (i)
-
 #Method to check if any real ingredients in a song list
 #Returns a list of ingredients (strings)
 def ingredient_matcher(lyrics):
@@ -281,7 +275,6 @@ def lyric_gatherer(song_limit, artist_name):
         print("This artist input is invalid")
         return lyric_list
     else:
-        print("made it this far")
         for song in songs:
             unique_lyrics = []
             unfiltered_lyrics = song.lyrics.split()
@@ -293,15 +286,3 @@ def lyric_gatherer(song_limit, artist_name):
             #Adding all new unique lyrics to the full list of the artist's lyrics
             lyric_list.extend(unique_lyrics)
         return lyric_list
-
-def main():
-    knowledge_list = []
-    artist = "Jimmy Buffett"
-    lyrics = lyric_gatherer(4, artist)
-    song_ingredients = ingredient_matcher(lyrics)
-
-    #ADD USER INPUT REPEATED REQUESTS FOR BAD INPUT
-
-    for item in song_ingredients:
-        food = Ingredient(item, 1, "oz")
-        knowledge_list.append(food)
