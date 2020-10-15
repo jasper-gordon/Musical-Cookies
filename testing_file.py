@@ -14,14 +14,21 @@ from Population import ingredient_matcher
 
 #Constant that defines how many of the inputted Artist's most popular songs the LyricsGenius API should look at
 NUM_ARTIST_SONGS = 8
+#Constant to limit the number of generations the user can request 
+GENERATION_LIMIT = 10
 
 def get_generations():
     """Prompts user for the int number of generations they want the program to run. If not given proper input, propmts user again.
-            Returns an int."""
+        Returns an int.
+    """
     generations = ""
     while True:
         try:
             generations = int(input())
+            #Ensuring the float is in between 0 and 1
+            if generations < 0 or generations > GENERATION_LIMIT:
+                print("Invalid input, please give an int value greater than 0.")
+                continue
         except ValueError:
             print("Invalid input, please give an int value like '3' or '4'")
             continue
@@ -31,8 +38,10 @@ def get_generations():
 
 #NEEDS TO MAKE SURE BETWEEN 0 AND 1
 def get_mutation_rate():
-    """Prompts user for the float mutation rate value between 0 and 1 they want the program to run with. If not given proper input, 
-            propmts user again. Returns a float."""  
+    """
+    Prompts user for the float mutation rate value between 0 and 1 they want the program to run with. If not given proper input, 
+        propmts user again. Returns a float.
+    """  
     mutation_rate = ""
     while True:
         try:
@@ -49,17 +58,16 @@ def get_mutation_rate():
     return mutation_rate
 
 def main():
-"""
-Main method that runs our Genetic Algorithm system while prompting and outputting information to the user in the terminal shell.
-"""
-    print ("\n Welecome to the Cookie Monster brought to you by the team at Too Many Cooks Kitchen \n Our cookie generator takes in any known Musical Artist, scours their songs for any culinary inspiration, \n and then adapts common cookie recipies to have a little taste of fame in them.")
-    print ("For each of the following prompts, please input your data and then press 'Return' \n")
+    """
+    Main method that runs our Genetic Algorithm system while prompting and outputting information to the user in the terminal shell.
+    """
+    print ("\nWelecome to the Cookie Monster brought to you by the team at Too Many Cooks Kitchen. \nOur cookie generator takes in any known musical artist, scours their songs for any culinary inspiration, \nand then adapts common cookie recipies to have a little taste of fame in them.")
+    print ("\nFor each of the following prompts, please input your data and then press 'Return' \n")
     print ("Please input your desired number of generations: ")
     generations_input = get_generations()
     print ("Please input a musical artist. Many artists do not reference food in their songs so don't be detterd if you are unlucky, just keep trying!")
     artist_name = str(input())
-    print ("Please input your desired recipe mutation rate. This is any value between 0 and 1 and it effects the odds that your recipe has that extra taste of")
-    print(" your favorite star. The recommened range for input is between .5 and .7 but try feel free to adjust and try multiple times!")
+    print ("Please input your desired recipe mutation rate (Any value between 0 and 1. The higher value, the greater the odds \nthat your recipe has that extra taste of your favorite star.")
     mutation_intput = get_mutation_rate()
     knowledge_list = []
     lyrics = lyric_gatherer(8, artist_name)
@@ -67,7 +75,7 @@ Main method that runs our Genetic Algorithm system while prompting and outputtin
     #Checking to make sure that the Artist input is correct.
     #Issues are if the Artist does not exist, or if they mention no ingredients in their songs.
     while len(song_ingredients) == 0:
-        print("We're sorry, the artist you inputted is either  not in our database or, more likely, does not sing enough about food. Please try inputting another name!")
+        print("We're sorry, the artist you inputted is either not in our database or, more likely, does not sing enough about food. Please try inputting another name!")
         artist_name = str(input())
         lyrics = lyric_gatherer(NUM_ARTIST_SONGS, artist_name)
         song_ingredients = ingredient_matcher(lyrics)
@@ -77,6 +85,7 @@ Main method that runs our Genetic Algorithm system while prompting and outputtin
         knowledge_list.append(food)
     mypop = Population(generations_input, "https://www.tasteofhome.com/collection/the-best-cookie-recipes/", mutation_intput, knowledge_list, artist_name)
     best_recipe = mypop.generate()
+    print("We now present for your consumption:\n")
     print (best_recipe)
     print ("And here is its score: " + str(best_recipe.evaluation))
 
