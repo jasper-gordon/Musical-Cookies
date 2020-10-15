@@ -1,31 +1,23 @@
+"""
+Names: Vincent Dong, Tenzin Choezin, Jasper Gordon
+Course: CSCI 3725
+Assignment: PQ2
+Date: 10/15/2020
+Description: This file takes in user input and executes the cookie generator program that uses the Population, Recipe, Ingredient, and Webscraping files.
+            The purpose of this file is to consolidate all the requests to the user and the run calls in a seperate file maintain organization and control.
+"""
 from Population import Population
 from Recipe import Recipe
 from Ingredient import Ingredient
 from Population import lyric_gatherer
 from Population import ingredient_matcher
 
-#mypop = Population(1, "practice_input/*.txt", .3)
-'''
-knowledge_list = []
-artist = "Weird Al"
-lyrics = lyric_gatherer(8, artist)
-song_ingredients = ingredient_matcher(lyrics)
-
-#ADD USER INPUT REPEATED REQUESTS FOR BAD INPUT
-
-for item in song_ingredients:
-    food = Ingredient(item, 1, "oz")
-    knowledge_list.append(food)
-
-
-mypop = Population(3, "https://www.tasteofhome.com/collection/the-best-cookie-recipes/", .3, knowledge_list, artist)
-best_recipe = mypop.generate()
-print (best_recipe)
-print ("And here is its score: " + str(best_recipe.evaluation))
-'''
-
+#Constant that defines how many of the inputted Artist's most popular songs the LyricsGenius API should look at
+NUM_ARTIST_SONGS = 8
 
 def get_generations():
+    """Prompts user for the int number of generations they want the program to run. If not given proper input, propmts user again.
+            Returns an int."""
     generations = ""
     while True:
         try:
@@ -39,10 +31,13 @@ def get_generations():
 
 #NEEDS TO MAKE SURE BETWEEN 0 AND 1
 def get_mutation_rate():
+    """Prompts user for the float mutation rate value between 0 and 1 they want the program to run with. If not given proper input, 
+            propmts user again. Returns a float."""  
     mutation_rate = ""
     while True:
         try:
             mutation_rate = float(input())
+            #Ensuring the float is in between 0 and 1
             if mutation_rate < 0 or mutation_rate > 1:
                 print("Invalid input, please give a float value between 0 and 1")
                 continue
@@ -52,10 +47,11 @@ def get_mutation_rate():
         else:
             break
     return mutation_rate
-"""
-Main method that runs our Genetic Algorithm system
-"""
+
 def main():
+"""
+Main method that runs our Genetic Algorithm system while prompting and outputting information to the user in the terminal shell.
+"""
     print ("\n Welecome to the Cookie Monster brought to you by the team at Too Many Cooks Kitchen \n Our cookie generator takes in any known Musical Artist, scours their songs for any culinary inspiration, \n and then adapts common cookie recipies to have a little taste of fame in them.")
     print ("For each of the following prompts, please input your data and then press 'Return' \n")
     print ("Please input your desired number of generations: ")
@@ -68,11 +64,14 @@ def main():
     knowledge_list = []
     lyrics = lyric_gatherer(8, artist_name)
     song_ingredients = ingredient_matcher(lyrics)
+    #Checking to make sure that the Artist input is correct.
+    #Issues are if the Artist does not exist, or if they mention no ingredients in their songs.
     while len(song_ingredients) == 0:
         print("We're sorry, the artist you inputted is either  not in our database or, more likely, does not sing enough about food. Please try inputting another name!")
         artist_name = str(input())
-        lyrics = lyric_gatherer(8, artist_name)
+        lyrics = lyric_gatherer(NUM_ARTIST_SONGS, artist_name)
         song_ingredients = ingredient_matcher(lyrics)
+    #Adding all ingredients mentioned by Artist into the knowdlege base as Ingredient objects.
     for item in song_ingredients:
         food = Ingredient(item, 1, "oz")
         knowledge_list.append(food)
@@ -83,12 +82,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-#print(mypop)
-
-#myingredient = [Ingredient("flour", 2.5)]
-#print (myingredient)
-
-#myrecipe = Recipe("bread", myingredient)
-#print (myrecipe)
