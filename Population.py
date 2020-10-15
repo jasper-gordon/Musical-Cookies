@@ -22,7 +22,6 @@ from fractions import Fraction
 import numpy as np
 import lyricsgenius
 genius = lyricsgenius.Genius("dEVN1E_5EEdG87GGOurKdFhPFkx-k-yTztAOSNJRkutxNoJmX4pI_38cBNPCUDTY")
-#genius.verbose = False
 genius.remove_section_headers = True
 WORD_EMBED_VALS = np.load('ingred_word_emb.npy', allow_pickle=True).item()
 INGRED_CATEGORIES = np.load('ingred_categories.npy', allow_pickle=True).item()
@@ -47,8 +46,6 @@ class Population:
         self.mutate_prob = mutate_prob #Mutation probability
         self.artist_name = artist_name #The artist's name
 
-        #for filename in glob.glob(recipes_url):
-        #current_file = open(filename, "r")
         # calling web scrpaing method from the Webscraping file, giving it URL
         cookie_dict = web_scraper(recipes_url)
         for cookie_name in cookie_dict:
@@ -89,6 +86,7 @@ class Population:
                     return ingredient_obj, recipe
                 else:
                     return essential_obj, recipe
+
             # Essential Ingredient Objects
             flour = Ingredient('flour', 0, "cup")
             sugar = Ingredient('sugar', 0, "cup")
@@ -102,6 +100,7 @@ class Population:
             egg, current_recipe = essential_ingredient(egg, current_recipe)
             salt, current_recipe = essential_ingredient(salt, current_recipe)
             vanilla_extract, current_recipe = essential_ingredient(vanilla_extract, current_recipe)
+
             # Insert essential ingredients to front of current_recipe
             current_recipe.insert(0,sugar)
             current_recipe.insert(0,flour)
@@ -139,6 +138,7 @@ class Population:
             for cookie in self.population:
                 if best_cookie.evaluation <= cookie.evaluation:
                     best_cookie = cookie
+
         #Cleaning the best cookie's ingredient list, by removing ingredients with 0 amount
         trash_list = []
         for item in best_cookie.ingredient_list:
@@ -146,6 +146,7 @@ class Population:
                 trash_list.append(item)
         for junk in trash_list:
             best_cookie.ingredient_list.remove(junk)
+
         #Naming the best cookie
         ing_name = best_cookie.ingredient_list[-1].name.capitalize()
         name_strings = [self.artist_name + "'s Famous", ing_name, "Cookies"]
@@ -210,9 +211,11 @@ class Population:
                 for ingredient in unique_ingredients:
                     ingredient.amount = ingredient_dict[ingredient.name]
                 return unique_ingredients
+
             cleaned_recipe1 = clean(new_recipe1_list)
             cleaned_recipe2 = clean(new_recipe2_list)
             return cleaned_recipe1, cleaned_recipe2
+
         # Go through shuffled breeding_pool and picks pairs
         for i in range(0, len(self.population), 2):
             child1_list, child2_list = one_point_crossover(parents[i], parents[i+1])
