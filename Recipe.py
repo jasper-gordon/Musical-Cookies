@@ -23,14 +23,18 @@ class Recipe:
 
 
     def __init__(self, name, ingredient_list):
-        """An initiliazing method for any new object of the Recipe class that takes a string name and a list of Ingredient
-            objects as arguments."""
+        """
+        An initiliazing method for any new object of the Recipe class that takes a string name and a list of Ingredient
+            objects as arguments.
+        """
         self.name = name
         self.ingredient_list = ingredient_list
         self.evaluation = self.evaluate()
 
     def __str__(self):
-        """Returns a string representation of this Recipe."""
+        """
+        Returns a string representation of this Recipe.
+        """
         output = self.name + "\n"
         for i in self.ingredient_list:
             output += str(i) + "\n"
@@ -43,16 +47,20 @@ class Recipe:
         return "Recipe('{0}', '{1}')".format(self.name, self.ingredient_list)
 
     def __lt__(self, other):
-        """A comparison method to the current Recipe object to another using their respective fitness amounts.
-        Returns a boolean"""
+        """
+        A comparison method to the current Recipe object to another using their respective fitness amounts.
+        Returns a boolean
+        """
         return self.evaluation < other.evaluation
 
     def evaluate(self):
-        """A method to determine the value of the recipe object. A recipe score is based off
+        """
+        A method to determine the value of the recipe object. A recipe score is based off
             the sum of the ingredient paring scores of its ingredients. Method calculates the
             scores of every pairing of ingredients within the recipe where both ingredients
             are in the known ingreedient list so that they are in the pairing database.
-            Returns the overall score of the Recipe. """
+            Returns the overall score of the Recipe. 
+        """
         score = 0.0
         for ingredient1 in self.ingredient_list:
             #The ingredient name
@@ -86,9 +94,11 @@ class Recipe:
         return score
 
     def mutate(self, mutate_prob, knowledge_base, artist_name):
-        """Method to mutate a the Recipe object in a variety ways.
-            Args: a mutation probability which is a float value between 0 and 1 to determine mutation,
-            a knowledge base which is a list of known Ingredient objects, an artist a name which is a string. """
+        """
+        Method to mutate a the Recipe object in a variety ways. Takes a mutation probability which is a 
+            float value between 0 and 1 to determine mutation, a knowledge base which is a list of known 
+            Ingredient objects, an artist a name which is a string. 
+            """
         basic_name = ""
         name_strings =  [artist_name + "'s Famous", basic_name, "Cookies"]
         r = random.uniform(0,1)
@@ -116,7 +126,6 @@ class Recipe:
         #If the randomly chosen song Ingredient is already in the Recipe
         if song_ingredient in self.ingredient_list:
             pairing_list = fpq.request_pairing(song_ingredient.name, .1)
-            #NEED TO MAKE METHOD TO GENERATE BIASED LIST
             random_value2 = random.randint(0, len(pairing_list) - 1)
             pairing_ingredient = Ingredient(pairing_list[random_value2], 1, "oz")
             self.ingredient_list.append(pairing_ingredient)

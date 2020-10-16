@@ -61,22 +61,22 @@ def main():
     """
     Main method that runs our Genetic Algorithm system while prompting and outputting information to the user in the terminal shell.
     """
-    print ("\nWelecome to the Cookie Monster brought to you by the team at Too Many Cooks Kitchen. \nOur cookie generator takes in any known musical artist, scours their songs for any culinary inspiration, \nand then adapts common cookie recipies to have a little taste of fame in them.")
+    print ("\nWelecome to CRAIG, brought to you by the team at Too Many Cooks Kitchen. \nCRAIG takes in any known musical artist, scours their songs for any culinary inspiration, \nand then adapts common cookie recipies to have a little taste of fame in them.")
     print ("\nFor each of the following prompts, please input your data and then press 'Return' \n")
     print ("Please input your desired number of generations: ")
     generations_input = get_generations()
     print ("Please input a musical artist. Many artists do not reference food in their songs so don't be detterd if you are unlucky, just keep trying!")
-    print ("A few suggestions for good artists include, but are not limited to: Weird Al, Harry Styles, Taylor Swift, Galantis, Katy Perry,  ")
+    print ("A few suggestions for good artists include, but are not limited to: Weird Al, Harry Styles, Taylor Swift, Kesha, Katy Perry, and Bruno Mars")
     artist_name = str(input())
     print ("Please input your desired recipe mutation rate (Any value between 0 and 1. The higher value, the greater the odds \nthat your recipe has that extra taste of your favorite star.")
     mutation_intput = get_mutation_rate()
     knowledge_list = []
-    lyrics = lyric_gatherer(8, artist_name)
+    lyrics = lyric_gatherer(NUM_ARTIST_SONGS, artist_name)
     song_ingredients = ingredient_matcher(lyrics)
     #Checking to make sure that the Artist input is correct.
     #Issues are if the Artist does not exist, or if they mention no ingredients in their songs.
     while len(song_ingredients) == 0:
-        print("We're sorry, the artist you inputted is either not in our database or, more likely, does not sing enough about food. Please try inputting another name!")
+        print("We're sorry, the artist you inputted is either not in our database or, more likely, does not sing enough about food. \nPlease try inputting another name!")
         artist_name = str(input())
         lyrics = lyric_gatherer(NUM_ARTIST_SONGS, artist_name)
         song_ingredients = ingredient_matcher(lyrics)
