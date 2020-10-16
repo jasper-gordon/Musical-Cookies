@@ -45,6 +45,7 @@ class Population:
         self.generations = generations #Number of generations to run GA on the population
         self.mutate_prob = mutate_prob #Mutation probability
         self.artist_name = artist_name #The artist's name
+        self.full_score_sheet = [] #List that will be populated with all recipe scores
 
         # calling web scrpaing method from the Webscraping file, giving it URL
         cookie_dict = web_scraper(recipes_url)
@@ -135,9 +136,17 @@ class Population:
             self.select()
             self.crossover()
             self.mutate()
+            generation_score_sheet = [] #List holding scores for all recipe scores in generation
             for cookie in self.population:
+                generation_score_sheet.append(cookie.evaluation)
                 if best_cookie.evaluation <= cookie.evaluation:
                     best_cookie = cookie
+            score_sum = 0
+            for score in generation_score_sheet:
+                score_sum += score
+            average_score = score_sum/len(generation_score_sheet)
+            generation_score_sheet.insert(0, average_score)
+            self.full_score_sheet.append(generation_score_sheet)
 
         #Cleaning the best cookie's ingredient list, by removing ingredients with 0 amount
         trash_list = []
