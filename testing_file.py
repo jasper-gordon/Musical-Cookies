@@ -13,7 +13,7 @@ from Population import lyric_gatherer
 from Population import ingredient_matcher
 
 #Constant that defines how many of the inputted Artist's most popular songs the LyricsGenius API should look at
-NUM_ARTIST_SONGS = 8
+NUM_ARTIST_SONGS = 10
 #Constant to limit the number of generations the user can request 
 GENERATION_LIMIT = 10
 
@@ -66,6 +66,7 @@ def main():
     print ("Please input your desired number of generations: ")
     generations_input = get_generations()
     print ("Please input a musical artist. Many artists do not reference food in their songs so don't be detterd if you are unlucky, just keep trying!")
+    print ("A few suggestions for good artists include, but are not limited to: Weird Al, Harry Styles, Taylor Swift, Galantis, Katy Perry,  ")
     artist_name = str(input())
     print ("Please input your desired recipe mutation rate (Any value between 0 and 1. The higher value, the greater the odds \nthat your recipe has that extra taste of your favorite star.")
     mutation_intput = get_mutation_rate()
