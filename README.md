@@ -17,3 +17,6 @@ Limitations: The complexity of CRAIG brought a few issues. We utilized the ingre
 
 Sources: https://towardsdatascience.com/song-lyrics-genius-api-dcc2819c29
         https://www.johnwmillr.com/scraping-genius-lyrics/
+        https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+        https://stackoverflow.com/questions/16627227/http-error-403-in-python-3-web-scraping
+        https://www.digitalocean.com/community/tutorials/how-to-scrape-web-pages-with-beautiful-soup-and-python-3

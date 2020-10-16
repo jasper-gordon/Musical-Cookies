@@ -61,6 +61,7 @@ def ingredient_dict_constructor(link_list, i, ingredient_dict):
             # makes sure we get actual ingredients added to the ingredient list
             if ingredient != soup.find('b', {"class": "sIngredient"}):
                 ingredient_list.append(str(ingredient))
+    #removing ingredients for cookie's frosting
     if recipe_name == "Raspberry Ribbons":
         ingredient_list = ingredient_list[:8]
     ingredient_dict[recipe_name] = ingredient_list
